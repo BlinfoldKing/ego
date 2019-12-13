@@ -7,13 +7,20 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@tinacms/api-git": "^0.4.6",
+    "@tinacms/git-client": "^0.4.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
     "next": "^9.1.5",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "styled-components": "^4.4.1",
+    "tinacms": "^0.10.0"
   },
   "scripts": {
-  "dev": "next",
-  "build": "next build",
-  "start": "next start"
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node server.js"
   }
 }
