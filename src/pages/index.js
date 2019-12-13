@@ -33,7 +33,6 @@ Index.getInitialProps = async function () {
                 slug
             };
         });
-        console.log(data)
         return data;
     })(require.context("../posts", true, /\.md$/));
 

@@ -57,7 +57,7 @@ export default function Page(props) {
         }
     });
 
-    useWatchFormValues(form, console.log);
+    useWatchFormValues(form, () => { });
 
     return (
         <div className="container" style={{
@@ -74,7 +74,6 @@ Page.getInitialProps = function (ctx) {
     const { slug } = ctx.query;
     let content = require(`../../posts/${slug}.md`);
     let data = matter(content.default);
-    console.log(data.content)
     return {
         slug: slug,
         data: data,
