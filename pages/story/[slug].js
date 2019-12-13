@@ -1,9 +1,16 @@
-import * as React from "react";
+import * as React from 'react'
+import matter from "gray-matter";
+import ReactMarkdown from "react-markdown";
+
 import { useCMS, useLocalForm, useWatchFormValues } from "tinacms";
+
+import generateMarkdown from "../../utils/generateMarkdown"
 
 export default function Page(props) {
     // grab the instance of the cms to access the registered git API
     let cms = useCMS();
+
+    const { data } = props
 
     // add a form to the CMS; store form data in `post`
     let [post, form] = useLocalForm({
@@ -12,7 +19,8 @@ export default function Page(props) {
 
         // starting values for the post object
         initialValues: {
-            title: props.title
+            title: data.data.title,
+            content: data.content
         },
 
         // field definition
@@ -21,7 +29,13 @@ export default function Page(props) {
                 name: "title",
                 label: "Title",
                 component: "text"
-            }
+            },
+            {
+                name: 'content',
+                component: 'markdown',
+                label: 'Post Body',
+                description: 'Edit the body of the post here',
+            },
         ],
 
         // save & commit the file when the "save" button is pressed
@@ -30,7 +44,9 @@ export default function Page(props) {
             return cms.api.git
                 .writeToDisk({
                     fileRelativePath: props.fileRelativePath,
-                    content: JSON.stringify({ title: data.title })
+                    content: generateMarkdown({
+                        title: data.title
+                    }, data.content)
                 })
                 .then(() => {
                     return cms.api.git.commit({
@@ -41,29 +57,27 @@ export default function Page(props) {
         }
     });
 
-    let writeToDisk = React.useCallback(formState => {
-        cms.api.git.writeToDisk({
-            fileRelativePath: props.fileRelativePath,
-            content: JSON.stringify({ title: formState.values.title })
-        });
-    }, []);
-
-    useWatchFormValues(form, writeToDisk);
+    useWatchFormValues(form, console.log);
 
     return (
-        <>
+        <div className="container" style={{
+            marginLeft: 100,
+            marginRight: 100
+        }}>
             <h1>{post.title}</h1>
-        </>
+            <ReactMarkdown source={post.content} />
+        </div>
     );
 }
 
-Page.getInitialProps = function(ctx) {
+Page.getInitialProps = function (ctx) {
     const { slug } = ctx.query;
-    let content = require(`../posts/${slug}.json`);
-
+    let content = require(`../../posts/${slug}.md`);
+    let data = matter(content.default);
+    console.log(data.content)
     return {
         slug: slug,
-        fileRelativePath: `/posts/${slug}.json`,
-        title: content.title
+        data: data,
+        fileRelativePath: `/posts/${slug}.md`,
     };
 };

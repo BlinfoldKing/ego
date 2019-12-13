@@ -14,7 +14,12 @@ class CustomApp extends App {
     render() {
         const { Component, pageProps } = this.props;
         return (
-            <Tina cms={this.cms}>
+            <Tina
+                cms={this.cms}
+                hidden={
+                    process.env.NODE_ENV
+                    && process.env.NODE_ENV == "production"
+                }>
                 <Component {...pageProps} />
             </Tina>
         );
