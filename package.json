@@ -1,0 +1,19 @@
+{
+  "name": "ego",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/BlinfoldKing/ego.git",
+  "author": "blinfoldking",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "next": "^9.1.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "scripts": {
+  "dev": "next",
+  "build": "next build",
+  "start": "next start"
+  }
+}
