@@ -3,21 +3,26 @@ import Head from 'next/head'
 import Link from 'next/link'
 import '../styles/styles.scss'
 
-export default ({ children }) => {
+export default ({ transparent, children }) => {
 
     const toggleStyles = (event) => {
         document.querySelector('#burger').classList.toggle('is-active')
         document.querySelector('#navbarmenu').classList.toggle('is-active')
     }
 
+    const metadata = require('../site.config').default
+
     return (
         <div>
             <Head>
-                <title>jvarness</title>
+                <title>{metadata.title}</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <header>
-                <nav className="navbar" role="navigation" aria-label="main navigation">
+                <nav
+                    className={`navbar ${transparent && "is-transparent"} is-fixed-top`}
+                    role="navigation"
+                    aria-label="main navigation">
                     <div className="navbar-brand">
                         <a className="navbar-item">
                             <img src="/static/pic.png" />
@@ -47,8 +52,15 @@ export default ({ children }) => {
                         </div>
                     </div>
                 </nav>
-            </header>
+            </header >
             {children}
-        </div>
+            <style jsx>
+                {`
+                    .navbar-item {
+                    ${transparent && "color: white;"}  
+                    } 
+                `}
+            </style>
+        </div >
     )
 }

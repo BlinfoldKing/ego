@@ -12,7 +12,9 @@ app.prepare().then(() => {
     const server = express();
 
     server.use(cors());
-    server.use("/___tina", gitApi.router());
+    server.use("/___tina", gitApi.router({
+        pushOnCommit: false
+    }));
 
     server.all("*", (req, res) => {
         return handle(req, res);
