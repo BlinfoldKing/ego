@@ -54,7 +54,8 @@ export default function Page(props) {
         // starting values for the post object
         initialValues: {
             title: data.data.title,
-            content: data.content
+            hero: data.data.hero,
+            content: data.content,
         },
 
         // field definition
@@ -65,20 +66,41 @@ export default function Page(props) {
                 component: "text"
             },
             {
+                name: "hero",
+                label: "Thumbnail",
+                component: "image",
+                parse: filename => `${filename}`,
+
+                previewSrc: (formValues, { input }) => {
+                    if (formValues.hero == "" || formValues.hero.includes("http")) {
+                        return formValues.hero
+                    }
+
+                    return `/${formValues.hero}`
+                },
+
+                uploadDir: () => {
+                    return "/public/"
+                },
+            },
+            {
                 name: 'content',
                 component: 'markdown',
                 label: 'Post Body',
                 description: 'Edit the body of the post here',
             },
+
         ],
 
         // save & commit the file when the "save" button is pressed
         onSubmit(data) {
+            console.log(data)
             return cms.api.git
                 .writeToDisk({
                     fileRelativePath: props.fileRelativePath,
                     content: generateMarkdown({
-                        title: data.title
+                        title: data.title,
+                        hero: data.hero
                     }, data.content)
                 })
                 .then(() => {
@@ -91,7 +113,18 @@ export default function Page(props) {
         }
     });
 
-    useWatchFormValues(form, () => { });
+    useWatchFormValues(form, (input) => {
+    });
+
+    let hero = undefined
+    if (post.hero) {
+        if (post.hero.includes("http")) {
+            hero = post.hero
+        } else {
+            hero = `/${post.hero}`
+        }
+    }
+
 
     return (
         <Layout
@@ -116,7 +149,7 @@ export default function Page(props) {
                 .header {
                     height: 70vh;
                     background-image: linear-gradient(to bottom, rgba(245, 246, 252, 0), rgba(255, 255, 255, 1)),
-url(${data.data.hero});
+url(${hero || data.data.hero});
                     background-size: cover;
                     display: flex;
                     align-items: flex-end;
