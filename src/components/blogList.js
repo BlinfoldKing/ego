@@ -25,7 +25,7 @@ const hanldeLeave = _ => {
 }
 
 const BlogList = posts => {
-    return posts.reverse().map((post, i) =>
+    return posts.map((post, i) =>
         <Link href={`/story/${post.slug}`} key={i}>
             <span
                 dangerouslySetInnerHTML={{ __html: post.document.data.title }}

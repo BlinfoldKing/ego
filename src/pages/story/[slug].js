@@ -45,6 +45,7 @@ export default function Page(props) {
     let cms = useCMS();
 
     const { data } = props
+    const originalData = data
 
     // add a form to the CMS; store form data in `post`
     let [post, form] = useLocalForm({
@@ -102,6 +103,7 @@ export default function Page(props) {
                 .writeToDisk({
                     fileRelativePath: props.fileRelativePath,
                     content: generateMarkdown({
+                        ...originalData.data,
                         title: data.title,
                         hero: data.hero
                     }, data.content)
@@ -146,6 +148,26 @@ export default function Page(props) {
             <div className="content container">
                 <ReactMarkdown className="post" source={post.content} />
             </div>
+            <div className="container post-navigator">
+                <div className="prev">
+                    {
+                        data.data.prev &&
+                        <div>
+                            <a href={`/story/${data.data.prev}`}>Prev</a><br />
+                            <span>{data.data.prevTitle}</span>
+                        </div>
+                    }
+                </div>
+                <div className="next">
+                    {
+                        data.data.next &&
+                        <div>
+                            <a href={`/story/${data.data.next}`}>Next</a><br />
+                            <span>{data.data.nextTitle}</span>
+                        </div>
+                    }
+                </div>
+            </div>
             <div className="top">
                 <a href="#"><i data-eva="arrowhead-up"></i></a>
             </div>
@@ -172,18 +194,34 @@ url(${hero || data.data.hero});
                 }
 
                 .content {
-                    padding: 20vw 20vw;
-                    padding-top: 50px;
+                    padding: 50px 20vw;
                 }
 
                 .top {
                     position: fixed;
-                    right: 200px;
+                    right: 10vw;
                     bottom: 100px;
                     padding: 10px;
                 }
 
-                
+                .post-navigator {
+                    display: flex;
+                    padding: 50px 20vw;
+                    justify-content: space-between;
+                } 
+
+                .post-navigator span {
+                    font-size: 20px;
+                    vertical-align: text-bottom;
+                }
+
+                .next {
+                    text-align: right
+                }
+
+                .prev {
+                    text-align: left
+                }
                `}</style>
         </Layout>
     );

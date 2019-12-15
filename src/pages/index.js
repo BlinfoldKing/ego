@@ -41,17 +41,40 @@ const Index = (props) => {
             },
         ],
 
+
         // save & commit the file when the "save" button is pressed
         onSubmit(data) {
             const slug = datePrefix(data.slug)
             const filepath = `/posts/${slug}.md`
+            const lastPost = props.posts[props.posts.length - 1]
+            const prev = props.posts.length > 0 ?
+                {
+                    prev: lastPost.slug,
+                    prevTitle: lastPost.document.data.title
+                } : {}
             return cms.api.git
                 .writeToDisk({
                     fileRelativePath: filepath,
                     content: generateMarkdown({
                         title: data.title,
-                        hero: ""
+                        hero: "",
+                        ...prev
                     }, data.content)
+                })
+                .then(() => {
+                    if (props.posts.length < 1) {
+                        return;
+                    }
+
+                    return cms.api.git
+                        .writeToDisk({
+                            fileRelativePath: `posts/${lastPost.slug}.md`,
+                            content: generateMarkdown({
+                                ...lastPost.document.data,
+                                next: slug,
+                                nextTitle: data.title
+                            }, lastPost.document.content)
+                        })
                 })
                 .then(() => {
                     return cms.api.git.commit({
@@ -69,6 +92,7 @@ const Index = (props) => {
     useWatchFormValues(form, (input) => {
     });
 
+    console.log(props.posts)
     return <Layout black={true} transparent={true}>
         <div id="background" className="home">
             <div className="container">
@@ -86,7 +110,7 @@ const Index = (props) => {
                         <div className="title is-2 spacer">&nbsp;</div>
                         <div className="title is-2 spacer">&nbsp;</div>
                         {
-                            BlogList(props.posts)
+                            BlogList(props.posts.reverse())
                         }
                         <h2 className="title is-2 spacer">&nbsp;</h2>
                         <h2 className="title is-2 spacer">&nbsp;</h2>

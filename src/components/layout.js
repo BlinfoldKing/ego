@@ -62,6 +62,7 @@ export default class Layout extends React.Component {
                     <title>{metadata.title}</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                     <script src="https://unpkg.com/eva-icons"></script>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
                 </Head>
                 <header>
                     <nav
@@ -89,9 +90,9 @@ export default class Layout extends React.Component {
 
                             <div className="navbar-end">
                                 <div className="navbar-item">
-                                    <a className="navbar-item">Home</a>
-                                    <a className="navbar-item">About</a>
-                                    <a className="navbar-item">Projects</a>
+                                    <a href="/" className="navbar-item">Blog</a>
+                                    <a href="/?about" className="navbar-item">About</a>
+                                    <a href="/" className="navbar-item"><s>Projects</s></a>
                                 </div>
                             </div>
                         </div>

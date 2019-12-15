@@ -1,8 +1,7 @@
 const generateMarkdown = (frontmatter, content) => {
     let ret =
         `---
-title: ${frontmatter.title}
-hero: ${frontmatter.hero}
+${Object.keys(frontmatter).map(key => `${key}: ${frontmatter[key]}`).join('\n')}
 ---
 ${content}
     `
