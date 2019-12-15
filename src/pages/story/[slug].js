@@ -72,11 +72,15 @@ export default function Page(props) {
                 parse: filename => `${filename}`,
 
                 previewSrc: (formValues, { input }) => {
-                    if (formValues.hero == "" || formValues.hero.includes("http")) {
-                        return formValues.hero
+                    if (formValues.hero) {
+                        if (!formValues.hero.includes("http")) {
+                            return `/${formValues.hero}`
+                        }
                     }
 
-                    return `/${formValues.hero}`
+
+                    return formValues.hero
+
                 },
 
                 uploadDir: () => {
@@ -94,7 +98,6 @@ export default function Page(props) {
 
         // save & commit the file when the "save" button is pressed
         onSubmit(data) {
-            console.log(data)
             return cms.api.git
                 .writeToDisk({
                     fileRelativePath: props.fileRelativePath,
@@ -115,6 +118,7 @@ export default function Page(props) {
 
     useWatchFormValues(form, (input) => {
     });
+
 
     let hero = undefined
     if (post.hero) {

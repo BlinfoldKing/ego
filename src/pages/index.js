@@ -1,14 +1,73 @@
 import React from 'react'
 import matter from "gray-matter";
-import Link from 'next/link';
+
+import { useCMS, useLocalForm, useWatchFormValues, } from "tinacms";
 import { useRouter } from 'next/router';
 
 import Layout from '../components/layout'
-import useHover from '../utils/useHover'
+import BlogList from '../components/blogList'
+
+import datePrefix from '../utils/datePrefix'
+import generateMarkdown from '../utils/generateMarkdown'
 
 const metadata = require('../site.config').default
 
+
+
 const Index = (props) => {
+    let cms = useCMS();
+    let router = useRouter();
+    let [_, form] = useLocalForm({
+        id: "add-post", // needs to be unique
+        label: "Add Post",
+
+        // starting values for the post object
+        initialValues: {
+            slug: undefined,
+            title: undefined,
+        },
+
+        // field definition
+        fields: [
+            {
+                name: "slug",
+                label: "Slug",
+                component: "text"
+            },
+            {
+                name: "title",
+                label: "Title",
+                component: "text"
+            },
+        ],
+
+        // save & commit the file when the "save" button is pressed
+        onSubmit(data) {
+            const slug = datePrefix(data.slug)
+            const filepath = `/posts/${slug}.md`
+            return cms.api.git
+                .writeToDisk({
+                    fileRelativePath: filepath,
+                    content: generateMarkdown({
+                        title: data.title,
+                        hero: ""
+                    }, data.content)
+                })
+                .then(() => {
+                    return cms.api.git.commit({
+                        files: [filepath],
+                        message: `New file from Tina: Update ${filepath}`
+                    });
+                })
+                .then(() => {
+                    router.push("/story/" + slug)
+                })
+                .catch(err => console.log(err));
+        }
+    });
+
+    useWatchFormValues(form, (input) => {
+    });
 
     return <Layout black={true} transparent={true}>
         <div id="background" className="home">
@@ -27,43 +86,7 @@ const Index = (props) => {
                         <div className="title is-2 spacer">&nbsp;</div>
                         <div className="title is-2 spacer">&nbsp;</div>
                         {
-                            props.posts.map(post =>
-                                <Link href={`/story/${post.slug}`}>
-                                    <span
-                                        dangerouslySetInnerHTML={{ __html: post.document.data.title }}
-
-                                        className="title is-2 is-active"
-                                        onMouseEnter={
-                                            e => {
-                                                let bg = document.getElementById("background")
-
-                                                bg.style.cssText = `
-                                            background-image: linear-gradient(to left, 
-                                                rgba(245, 246, 252, 0), 
-                                                rgba(255, 255, 255, 0.50), 
-                                                rgba(255, 255, 255, 1), 
-                                                rgba(255, 255, 255, 1)),
-                                                url(${post.document.data.hero});
-                                            background-size: cover;
-
-                                            `
-                                            }
-                                        }
-
-                                        onMouseLeave={
-                                            e => {
-                                                let bg = document.getElementById("background")
-                                                let posts = document.getElementsByClassName("post-list")[0]
-
-                                                bg.style.cssText = `
-                                            background-image: white;
-
-                                            `
-                                            }
-                                        }
-                                    ></span>
-                                </Link>
-                            )
+                            BlogList(props.posts)
                         }
                         <h2 className="title is-2 spacer">&nbsp;</h2>
                         <h2 className="title is-2 spacer">&nbsp;</h2>

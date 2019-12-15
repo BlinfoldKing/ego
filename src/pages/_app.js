@@ -3,6 +3,7 @@ import App from "next/app";
 import { Tina, TinaCMS } from "tinacms";
 import { GitClient } from "@tinacms/git-client";
 
+
 class CustomApp extends App {
     constructor() {
         super();
@@ -17,8 +18,7 @@ class CustomApp extends App {
             <Tina
                 cms={this.cms}
                 hidden={
-                    process.env.NODE_ENV
-                    && process.env.NODE_ENV == "production"
+                    false
                 }>
                 <Component {...pageProps} />
             </Tina>
