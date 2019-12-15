@@ -9,13 +9,9 @@ import useHover from '../utils/useHover'
 const metadata = require('../site.config').default
 
 const Index = (props) => {
-    const router = useRouter()
 
-    console.log(router.query.story)
-
-
-    return <Layout>
-        <div className=" home">
+    return <Layout black={true} transparent={true}>
+        <div id="background" className="home">
             <div className="container">
                 <div className="profile">
                     <img src={metadata.profile.pic} alt="" />
@@ -23,15 +19,60 @@ const Index = (props) => {
                         {metadata.profile.description}
                     </p>
                 </div>
-                <div className="post-list">
-                    {
-                        props.posts.map(post =>
-                            <Link href={`/story/${post.slug}`}>
-                                <h2 className="title is-2 is-active">{post.document.data.title}</h2>
-                            </Link>
-                        )
-                    }
+                <div>
+                    <div className="post-list">
+                        <div className="title is-2 spacer">&nbsp;</div>
+                        <div className="title is-2 spacer">&nbsp;</div>
+                        <div className="title is-2 spacer">&nbsp;</div>
+                        <div className="title is-2 spacer">&nbsp;</div>
+                        <div className="title is-2 spacer">&nbsp;</div>
+                        {
+                            props.posts.map(post =>
+                                <Link href={`/story/${post.slug}`}>
+                                    <span
+                                        dangerouslySetInnerHTML={{ __html: post.document.data.title }}
+
+                                        className="title is-2 is-active"
+                                        onMouseEnter={
+                                            e => {
+                                                let bg = document.getElementById("background")
+
+                                                bg.style.cssText = `
+                                            background-image: linear-gradient(to left, 
+                                                rgba(245, 246, 252, 0), 
+                                                rgba(255, 255, 255, 0.50), 
+                                                rgba(255, 255, 255, 1), 
+                                                rgba(255, 255, 255, 1)),
+                                                url(${post.document.data.hero});
+                                            background-size: cover;
+
+                                            `
+                                            }
+                                        }
+
+                                        onMouseLeave={
+                                            e => {
+                                                let bg = document.getElementById("background")
+                                                let posts = document.getElementsByClassName("post-list")[0]
+
+                                                bg.style.cssText = `
+                                            background-image: white;
+
+                                            `
+                                            }
+                                        }
+                                    ></span>
+                                </Link>
+                            )
+                        }
+                        <h2 className="title is-2 spacer">&nbsp;</h2>
+                        <h2 className="title is-2 spacer">&nbsp;</h2>
+                        <h2 className="title is-2 spacer">&nbsp;</h2>
+                        <h2 className="title is-2 spacer">&nbsp;</h2>
+                        <h2 className="title is-2 spacer">&nbsp;</h2>
+                    </div>
                 </div>
+
             </div>
         </div>
         <style jsx>{`
@@ -39,7 +80,7 @@ const Index = (props) => {
                 display: flex;
                 flex-direction: row;
                 width: 100vw;
-                padding: 100px;
+                padding: 0 100px;
                 max-width: 100vw;
                 position: absolute;
                 top: 50%;
@@ -47,9 +88,13 @@ const Index = (props) => {
                 transform: translateY(-50%);
                 align-items:center
             }
+
+            #background {
+                height: 100vh;
+            }
         `}
         </style>
-    </Layout>
+    </Layout >
 };
 
 Index.getInitialProps = async function () {

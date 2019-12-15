@@ -84,7 +84,7 @@ export default function Page(props) {
                 .then(() => {
                     return cms.api.git.commit({
                         files: [props.fileRelativePath],
-                        message: `Commit from Tina: Update ${data.fileRelativePath}`
+                        message: `Commit from Tina: Update ${props.fileRelativePath}`
                     });
                 })
                 .catch(err => console.log(err));
@@ -94,15 +94,23 @@ export default function Page(props) {
     useWatchFormValues(form, () => { });
 
     return (
-        <Layout transparent={scrollY == 0 || scrollY < window.innerHeight * 0.6}>
+        <Layout
+            transparent={scrollY == 0 || scrollY < window.innerHeight * 0.65}
+            black={scrollY >= window.innerHeight * 0.65}>
             <div className="header">
                 <div className="container">
                     <span className=""><a href="/">back to home</a></span>
-                    <h1 className="title is-1">{post.title}</h1>
+                    <h1
+                        className="title is-1"
+                        dangerouslySetInnerHTML={{ __html: post.title }}
+                    ></h1>
                 </div>
             </div>
             <div className="content container">
                 <ReactMarkdown className="post" source={post.content} />
+            </div>
+            <div className="top">
+                <a href="#"><i data-eva="arrowhead-up"></i></a>
             </div>
             <style jsx>{`
                 .header {
@@ -123,13 +131,22 @@ url(${data.data.hero});
                 }
 
                 .header .container {
-                    padding: 0 290px;
+                    padding: 0 20vw;
                 }
 
                 .content {
-                    padding: 100px 300px;
+                    padding: 20vw 20vw;
                     padding-top: 50px;
                 }
+
+                .top {
+                    position: fixed;
+                    right: 200px;
+                    bottom: 100px;
+                    padding: 10px;
+                }
+
+                
                `}</style>
         </Layout>
     );
