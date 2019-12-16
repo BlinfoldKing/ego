@@ -19,15 +19,14 @@ const About = (props) => (
         </p>
         <div className="social-media">
             <a target="__blank" href={metadata.profile.social.github}>
-                <i class="fab fa-github-square" style={{ fontSize: 30 }}></i>
+                <i className="fab fa-github-square" style={{ fontSize: 30 }}></i>
             </a>
             <a target="__blank" href={metadata.profile.social.linkedin}>
-                <i class="fab fa-linkedin" style={{ fontSize: 30 }}></i>
+                <i className="fab fa-linkedin" style={{ fontSize: 30 }}></i>
             </a>
             <a target="__blank" href={metadata.profile.social.email}>
-                <i class="fas fa-envelope-square" style={{ fontSize: 30 }}></i>
+                <i className="fas fa-envelope-square" style={{ fontSize: 30 }}></i>
             </a>
-
         </div>
         <style jsx>
             {`

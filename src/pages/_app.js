@@ -18,7 +18,7 @@ class CustomApp extends App {
             <Tina
                 cms={this.cms}
                 hidden={
-                    false
+                    !process.env.dev
                 }>
                 <Component {...pageProps} />
             </Tina>

@@ -17,7 +17,7 @@ const Index = (props) => {
     let cms = useCMS();
     let router = useRouter();
     let [_, form] = useLocalForm({
-        id: "add-post", // needs to be unique
+        id: "add-post",
         label: "Add Post",
 
         // starting values for the post object
@@ -25,6 +25,8 @@ const Index = (props) => {
             slug: undefined,
             title: undefined,
         },
+
+        reset: () => { },
 
         // field definition
         fields: [
@@ -84,14 +86,13 @@ const Index = (props) => {
                 .then(() => {
                     router.push("/story/" + slug)
                 })
-                .catch(err => console.log(err));
+                .catch(err => alert(err));
         }
     });
 
     useWatchFormValues(form, (input) => {
     });
 
-    console.log(props.posts)
     return <Layout black={true} transparent={true}>
         <div id="background" className="home">
             <div className="container">
@@ -111,7 +112,7 @@ const Index = (props) => {
                                 <div className="title is-2 spacer">&nbsp;</div>
                                 <div className="title is-2 spacer">&nbsp;</div>
                                 {
-                                    BlogList(props.posts.reverse())
+                                    BlogList(props.posts)
                                 }
                                 <h2 className="title is-2 spacer">&nbsp;</h2>
                                 <h2 className="title is-2 spacer">&nbsp;</h2>
@@ -169,7 +170,7 @@ Index.getInitialProps = async function () {
     })(require.context("../../posts", true, /\.md$/));
 
     return {
-        posts,
+        posts: posts.reverse(),
     }
 }
 

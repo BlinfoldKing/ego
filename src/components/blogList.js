@@ -27,14 +27,16 @@ const hanldeLeave = _ => {
 const BlogList = posts => {
     return posts.map((post, i) =>
         <Link href={`/story/${post.slug}`} key={i}>
-            <span
-                dangerouslySetInnerHTML={{ __html: post.document.data.title }}
+            <a >
+                <span
+                    dangerouslySetInnerHTML={{ __html: post.document.data.title }}
 
-                className="title is-2 is-active"
-                onMouseEnter={handleEnter(post)}
+                    className="title is-2 is-active"
+                    onMouseEnter={handleEnter(post)}
 
-                onMouseLeave={hanldeLeave}
-            ></span>
+                    onMouseLeave={hanldeLeave}
+                ></span>
+            </a>
         </Link>
     )
 }

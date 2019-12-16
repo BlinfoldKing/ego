@@ -1,13 +1,12 @@
 import * as React from 'react'
 import matter from "gray-matter";
-import uuid from "uuid/v4"
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
-
 import { useCMS, useLocalForm, useWatchFormValues } from "tinacms";
 
 import generateMarkdown from "../../utils/generateMarkdown"
 import Layout from '../../components/layout'
+import Link from 'next/link';
 
 function debounce(func, wait = 20, immediate = true) {
     let timeout;
@@ -115,7 +114,7 @@ export default function Page(props) {
                         message: `Commit from Tina: Update ${props.fileRelativePath}`
                     });
                 })
-                .catch(err => console.log(err));
+                .catch(err => alert(err));
         }
     });
 
@@ -136,7 +135,7 @@ export default function Page(props) {
     return (
         <Layout
             transparent={scrollY == 0 || scrollY < window.innerHeight * 0.65}
-            black={scrollY >= window.innerHeight * 0.65}>
+            black={scrollY >= window.innerHeight * 0.55}>
             <div className="header">
                 <div className="container">
                     <span className=""><a href="/">back to home</a></span>
@@ -154,7 +153,11 @@ export default function Page(props) {
                     {
                         data.data.prev &&
                         <div>
-                            <a href={`/story/${data.data.prev}`}>Prev</a><br />
+                            <div>
+                                <Link href={`/story/${data.data.prev}`}>
+                                    <a>Prev</a>
+                                </Link>
+                            </div>
                             <span>{data.data.prevTitle}</span>
                         </div>
                     }
@@ -163,7 +166,11 @@ export default function Page(props) {
                     {
                         data.data.next &&
                         <div>
-                            <a href={`/story/${data.data.next}`}>Next</a><br />
+                            <div>
+                                <Link href={`/story/${data.data.next}`}>
+                                    <a>Next</a>
+                                </Link>
+                            </div>
                             <span>{data.data.nextTitle}</span>
                         </div>
                     }
@@ -174,7 +181,7 @@ export default function Page(props) {
             </div>
             <style jsx>{`
                 .header {
-                    height: 70vh;
+                    height: 60vh;
                     background-image: linear-gradient(to bottom, rgba(245, 246, 252, 0), rgba(255, 255, 255, 1)),
 url(${hero || data.data.hero});
                     background-size: cover;
@@ -191,11 +198,11 @@ url(${hero || data.data.hero});
                 }
 
                 .header .container {
-                    padding: 0 20vw;
+                    padding: 0 10vw;
                 }
 
                 .content {
-                    padding: 50px 20vw;
+                    padding: 50px 10vw;
                 }
 
                 .top {
@@ -207,7 +214,7 @@ url(${hero || data.data.hero});
 
                 .post-navigator {
                     display: flex;
-                    padding: 50px 20vw;
+                    padding: 50px 10vw;
                     justify-content: space-between;
                 } 
 

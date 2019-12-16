@@ -1,8 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 
 import '../styles/styles.scss'
+import Link from 'next/link';
 
 export default class Layout extends React.Component {
 
@@ -74,24 +74,34 @@ export default class Layout extends React.Component {
                             paddingRight: 100
                         }}>
                         <div className="navbar-brand">
-                            <a className="navbar-item" href="/">
-                                <h1 id="logo" >EGO</h1>
-                            </a>
-                            <a id="burger" onClick={toggleStyles}
-                                role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarmenu">
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                            </a>
+                            <Link href="/">
+                                <a className="navbar-item">
+                                    <h1 id="logo" >EGO</h1>
+                                </a>
+                            </Link>
+                            <Link>
+                                <a id="burger" onClick={toggleStyles}
+                                    role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarmenu">
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
+                                </a>
+                            </Link>
                         </div>
                         <div id="navbarmenu" className="navbar-menu">
                             <div className="navbar-start">
                             </div>
 
                             <div className="navbar-end">
-                                <a href="/" className="navbar-item">Blog</a>
-                                <a href="/?about=show" className="navbar-item">About</a>
-                                <a href="/" className="navbar-item"><s>Projects</s></a>
+                                <Link href="/" >
+                                    <a className="navbar-item">Blog</a>
+                                </Link>
+                                <Link href="/?about=show" >
+                                    <a className="navbar-item">About</a>
+                                </Link>
+                                <Link >
+                                    <a disabled className=" disabled navbar-item"><s>Projects</s></a>
+                                </Link>
                             </div>
                         </div>
                     </nav>
