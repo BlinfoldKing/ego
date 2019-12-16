@@ -1,5 +1,6 @@
 import * as React from 'react'
 import matter from "gray-matter";
+import uuid from "uuid/v4"
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 

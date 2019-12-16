@@ -75,7 +75,7 @@ export default class Layout extends React.Component {
                         }}>
                         <div className="navbar-brand">
                             <a className="navbar-item" href="/">
-                                <h1><i>blinfoldking</i></h1>
+                                <h1 id="logo" >EGO</h1>
                             </a>
                             <a id="burger" onClick={toggleStyles}
                                 role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarmenu">
@@ -89,11 +89,9 @@ export default class Layout extends React.Component {
                             </div>
 
                             <div className="navbar-end">
-                                <div className="navbar-item">
-                                    <a href="/" className="navbar-item">Blog</a>
-                                    <a href="/?about" className="navbar-item">About</a>
-                                    <a href="/" className="navbar-item"><s>Projects</s></a>
-                                </div>
+                                <a href="/" className="navbar-item">Blog</a>
+                                <a href="/?about=show" className="navbar-item">About</a>
+                                <a href="/" className="navbar-item"><s>Projects</s></a>
                             </div>
                         </div>
                     </nav>
@@ -103,8 +101,7 @@ export default class Layout extends React.Component {
                     {`
                     .navbar-item {
                     ${!black && "color: white;"}  
-                    } 
-
+                    }
                 `}
                 </style>
             </div >

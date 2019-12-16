@@ -9,10 +9,9 @@ import BlogList from '../components/blogList'
 
 import datePrefix from '../utils/datePrefix'
 import generateMarkdown from '../utils/generateMarkdown'
+import About from '../components/about';
 
 const metadata = require('../site.config').default
-
-
 
 const Index = (props) => {
     let cms = useCMS();
@@ -99,25 +98,28 @@ const Index = (props) => {
                 <div className="profile">
                     <img src={metadata.profile.pic} alt="" />
                     <p>
-                        {metadata.profile.description}
+                        {metadata.profile.tagline}
                     </p>
                 </div>
                 <div>
-                    <div className="post-list">
-                        <div className="title is-2 spacer">&nbsp;</div>
-                        <div className="title is-2 spacer">&nbsp;</div>
-                        <div className="title is-2 spacer">&nbsp;</div>
-                        <div className="title is-2 spacer">&nbsp;</div>
-                        <div className="title is-2 spacer">&nbsp;</div>
-                        {
-                            BlogList(props.posts.reverse())
-                        }
-                        <h2 className="title is-2 spacer">&nbsp;</h2>
-                        <h2 className="title is-2 spacer">&nbsp;</h2>
-                        <h2 className="title is-2 spacer">&nbsp;</h2>
-                        <h2 className="title is-2 spacer">&nbsp;</h2>
-                        <h2 className="title is-2 spacer">&nbsp;</h2>
-                    </div>
+                    {
+                        !router.query.about ?
+                            <div className="post-list">
+                                <div className="title is-2 spacer">&nbsp;</div>
+                                <div className="title is-2 spacer">&nbsp;</div>
+                                <div className="title is-2 spacer">&nbsp;</div>
+                                <div className="title is-2 spacer">&nbsp;</div>
+                                <div className="title is-2 spacer">&nbsp;</div>
+                                {
+                                    BlogList(props.posts.reverse())
+                                }
+                                <h2 className="title is-2 spacer">&nbsp;</h2>
+                                <h2 className="title is-2 spacer">&nbsp;</h2>
+                                <h2 className="title is-2 spacer">&nbsp;</h2>
+                                <h2 className="title is-2 spacer">&nbsp;</h2>
+                                <h2 className="title is-2 spacer">&nbsp;</h2>
+                            </div> : <About />
+                    }
                 </div>
 
             </div>

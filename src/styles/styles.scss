@@ -1,8 +1,23 @@
 @import "../../node_modules/bulma/bulma.sass";
 @import "../../node_modules/victormono/dist/index.css";
 
+@font-face {
+  font-family: Blanka;
+  src: url(/Blanka-Regular.otf) format("opentype");
+}
+
+@font-face {
+  font-family: Bankay;
+  src: url(/Bankay.otf) format("opentype");
+}
+
 * {
   font-family: Victor Mono;
+}
+
+#logo {
+  font-family: Bankay;
+  font-size: 40px;
 }
 
 nav {
@@ -81,15 +96,18 @@ nav {
       display: block;
     }
     .title {
-      color: #999;
+      // color: #999;
       font-size: 3.5rem;
       margin-bottom: 0;
     }
 
     .title:hover:not(.spacer) {
-      color: black;
+      color: white;
       font-size: 4rem;
       cursor: pointer;
+      // background-color: #333;
+      background: linear-gradient(to right, #333, #222, #22222222, #11111100);
+      width: 100vw;
     }
   }
 }

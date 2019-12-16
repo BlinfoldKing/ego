@@ -1,8 +1,10 @@
 const withSass = require('@zeit/next-sass')
+const withFonts = require('next-fonts');
 
 module.exports = {
     target: 'serverless',
-    ...withSass({
+    ...withFonts(withSass({
+        enableSvg: true,
         webpack(config, _) {
             config.module.rules.push({
                 test: /\.md$/,
@@ -14,5 +16,5 @@ module.exports = {
             })
             return config;
         }
-    }),
+    })),
 }
