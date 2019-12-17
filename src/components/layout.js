@@ -48,7 +48,7 @@ export default class Layout extends React.Component<Props> {
 		if (body) {
 			body.appendChild(eva);
 			if (!document.getElementById('cursor')) {
-				body.appendChild(script);
+				// body.appendChild(script);
 			}
 		}
 	}
