@@ -20,7 +20,7 @@ services:
         - cms
         - www
     volumes:
-        - ./nginx.conf:/etc/nginx/nginx.conf
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
         - 80:80
         - 443:443
