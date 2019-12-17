@@ -3,14 +3,14 @@ services:
   cms:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      dockerfile: ./docker/Dockerfile.dev
     volumes: 
         - ./posts:/app/posts
         - ./public:/app/public
   www:
     build:
       context: ./
-      dockerfile: Dockerfile.prod
+      dockerfile: ./docker/Dockerfile.prod
     volumes:
         - ./posts:/app/posts
         - ./public:/app/public
