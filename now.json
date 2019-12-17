@@ -1,0 +1,5 @@
+{
+	"env": {
+		"NOW_GITHUB_COMMIT_REF": "master"
+	}
+}
