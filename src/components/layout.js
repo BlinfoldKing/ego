@@ -1,26 +1,32 @@
-import React from 'react'
-import Head from 'next/head'
+// @flow
+import React from 'react';
+import type { Node } from 'react';
+import Head from 'next/head';
 
-import '../styles/styles.scss'
+import '../styles/styles.scss';
 import Link from 'next/link';
 
-export default class Layout extends React.Component {
+type Props = {
+	transparent: boolean,
+	children: Node,
+	black: boolean
+};
 
-    componentDidMount() {
-        const eva = document.createElement("script");
-        eva.async = true;
-        eva.src = ""
-        document.body.appendChild(eva);
+export default class Layout extends React.Component<Props> {
+	componentDidMount() {
+		const eva = document.createElement('script');
+		eva.async = true;
+		eva.src = '';
+		const body = document.body;
 
-        const icons = document.createElement("script")
-        icons.innerHTML = `
+		const icons = document.createElement('script');
+		icons.innerHTML = `
            eva.replace()
-        `
-        document.body.appendChild(icons)
+        `;
 
-        const script = document.createElement("script");
+		const script = document.createElement('script');
 
-        script.innerHTML = `
+		script.innerHTML = `
         let cursor = document.querySelector('.cursor');
         let crosshair = document.querySelector('.crosshair');
 
@@ -36,86 +42,101 @@ export default class Layout extends React.Component {
                 cursor.classList.remove("expand");
             }, 500)
         })
-        `
-        script.id = "cursor"
+        `;
+		script.id = 'cursor';
 
-        if (!document.getElementById("cursor")) {
-            document.body.appendChild(script);
-        }
-    }
+		if (body) {
+			body.appendChild(eva);
+			if (!document.getElementById('cursor')) {
+				body.appendChild(script);
+			}
+		}
+	}
 
+	render() {
+		const { transparent, children, black } = this.props;
 
-    render() {
+		// TODO: used later for responsive
+		// const toggleStyles = () => {
+		// 	const burger = document.querySelector('#burger');
+		// 	if (burger) burger.classList.toggle('is-active');
+		// 	const navbar = document.querySelector('#navbarmenu');
+		// 	if (navbar) navbar.classList.toggle('is-active');
+		// };
 
-        const { transparent, children, black } = this.props
+		const metadata = require('../site.config').default;
 
-        const toggleStyles = (event) => {
-            document.querySelector('#burger').classList.toggle('is-active')
-            document.querySelector('#navbarmenu').classList.toggle('is-active')
-        }
+		return (
+			<div>
+				<Head>
+					<title>{metadata.title}</title>
+					<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+					<script src="https://unpkg.com/eva-icons" />
+					<link
+						rel="stylesheet"
+						href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+					/>
+				</Head>
+				<header>
+					<nav
+						className={`navbar ${transparent ? 'is-transparent' : ''} is-fixed-top`}
+						role="navigation"
+						aria-label="main navigation"
+						style={{
+							paddingLeft: 100,
+							paddingRight: 100
+						}}
+					>
+						<div className="navbar-brand">
+							<Link href="/">
+								<a className="navbar-item">
+									<h1 id="logo">EGO</h1>
+								</a>
+							</Link>
+							{/* <Link>
+								<a
+									id="burger"
+									onClick={toggleStyles}
+									role="button"
+									className="navbar-burger burger"
+									aria-label="menu"
+									aria-expanded="false"
+									data-target="navbarmenu"
+								>
+									<span aria-hidden="true" />
+									<span aria-hidden="true" />
+									<span aria-hidden="true" />
+								</a>
+							</Link> */}
+						</div>
+						<div id="navbarmenu" className="navbar-menu">
+							<div className="navbar-start" />
 
-        const metadata = require('../site.config').default
-
-        return (
-            <div>
-                <Head>
-                    <title>{metadata.title}</title>
-                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                    <script src="https://unpkg.com/eva-icons"></script>
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
-                </Head>
-                <header>
-                    <nav
-                        className={`navbar ${transparent && "is-transparent"} is-fixed-top`}
-                        role="navigation"
-                        aria-label="main navigation"
-                        style={{
-                            paddingLeft: 100,
-                            paddingRight: 100
-                        }}>
-                        <div className="navbar-brand">
-                            <Link href="/">
-                                <a className="navbar-item">
-                                    <h1 id="logo" >EGO</h1>
-                                </a>
-                            </Link>
-                            <Link>
-                                <a id="burger" onClick={toggleStyles}
-                                    role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarmenu">
-                                    <span aria-hidden="true"></span>
-                                    <span aria-hidden="true"></span>
-                                    <span aria-hidden="true"></span>
-                                </a>
-                            </Link>
-                        </div>
-                        <div id="navbarmenu" className="navbar-menu">
-                            <div className="navbar-start">
-                            </div>
-
-                            <div className="navbar-end">
-                                <Link href="/" >
-                                    <a className="navbar-item">Blog</a>
-                                </Link>
-                                <Link href="/?about=show" >
-                                    <a className="navbar-item">About</a>
-                                </Link>
-                                <Link >
-                                    <a disabled className=" disabled navbar-item"><s>Projects</s></a>
-                                </Link>
-                            </div>
-                        </div>
-                    </nav>
-                </header >
-                {children}
-                <style jsx>
-                    {`
-                    .navbar-item {
-                    ${!black && "color: white;"}  
-                    }
-                `}
-                </style>
-            </div >
-        )
-    }
-
-} 
+							<div className="navbar-end">
+								<Link href="/">
+									<a className="navbar-item">Blog</a>
+								</Link>
+								<Link href="/?about=show">
+									<a className="navbar-item">About</a>
+								</Link>
+								<Link href="">
+									<a disabled className=" disabled navbar-item">
+										<s>Projects</s>
+									</a>
+								</Link>
+							</div>
+						</div>
+					</nav>
+				</header>
+				{children}
+				<style jsx>
+					{`
+						.navbar-item {
+							${!black ? 'color: white;' : ''};
+						}
+					`}
+				</style>
+			</div>
+		);
+	}
+}
