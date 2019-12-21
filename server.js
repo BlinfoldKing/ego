@@ -15,13 +15,11 @@ app.prepare().then(() => {
   server.use(
     '/___tina',
     gitApi.router({
-      pushOnCommit: false
-    })
+      pushOnCommit: false,
+    }),
   );
 
-  server.all('*', (req, res) => {
-    return handle(req, res);
-  });
+  server.all('*', (req, res) => handle(req, res));
 
   server.listen(port, (err) => {
     if (err) throw err;

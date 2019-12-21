@@ -1,20 +1,19 @@
 // @flow
-import * as React from "react";
-import matter from "gray-matter";
-import ReactMarkdown from "react-markdown";
-import { useState, useEffect } from "react";
-import { useCMS, useLocalForm, useWatchFormValues } from "tinacms";
+import matter from 'gray-matter';
+import ReactMarkdown from 'react-markdown';
+import React, { useState, useEffect } from 'react';
+import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
 
 // import draftToHtml from "draftjs-to-html";
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
 
-import generateMarkdown from "../../utils/generateMarkdown";
-import Layout from "../../components/layout";
-import Link from "next/link";
+import Link from 'next/link';
+import generateMarkdown from '../../utils/generateMarkdown';
+import Layout from '../../components/layout';
 
-import type { Document } from "../../types/document.type";
+import type { Document } from '../../types/document.type';
 
-import Editor from '../../components/editor'
+import Editor from '../../components/editor';
 
 type Props = {
     post: Document,
@@ -24,10 +23,11 @@ type Props = {
 
 function debounce(func, wait = 20, immediate = true) {
   let timeout;
-  return function() {
+  return () => {
     const context = this;
+    // eslint-disable-next-line prefer-rest-params
     const args = arguments;
-    const later = function() {
+    const later = () => {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -39,7 +39,7 @@ function debounce(func, wait = 20, immediate = true) {
 }
 
 export default function Page(props: Props) {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     global.window = {};
   }
 
@@ -47,21 +47,20 @@ export default function Page(props: Props) {
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", debounce(handleScroll));
-    return () =>
-      window.removeEventListener("scroll", debounce(handleScroll));
+    window.addEventListener('scroll', debounce(handleScroll));
+    return () => window.removeEventListener('scroll', debounce(handleScroll));
   }, [debounce]);
 
   // grab the instance of the cms to access the registered git API
-  let cms = useCMS();
+  const cms = useCMS();
 
   const { post } = props;
   const originalData = post;
 
   // add a form to the CMS; store form data in `post`
-  let [newPost, form] = useLocalForm({
+  const [newPost, form] = useLocalForm({
     id: props.fileRelativePath, // needs to be unique
-    label: "Edit Post",
+    label: 'Edit Post',
 
     // starting values for the post object
     initialValues: {
@@ -73,19 +72,19 @@ export default function Page(props: Props) {
     // field definition
     fields: [
       {
-        name: "title",
-        label: "Title",
-        component: "text"
+        name: 'title',
+        label: 'Title',
+        component: 'text',
       },
       {
-        name: "hero",
-        label: "Thumbnail",
-        component: "image",
-        parse: filename => `${filename}`,
+        name: 'hero',
+        label: 'Thumbnail',
+        component: 'image',
+        parse: (filename) => `${filename}`,
 
-        previewSrc: formValues => {
+        previewSrc: (formValues) => {
           if (formValues.hero) {
-            if (!formValues.hero.includes("http")) {
+            if (!formValues.hero.includes('http')) {
               return `/${formValues.hero}`;
             }
           }
@@ -93,22 +92,20 @@ export default function Page(props: Props) {
           return formValues.hero;
         },
 
-        uploadDir: () => {
-          return "/public/";
-        }
+        uploadDir: () => '/public/',
       },
       {
         name: 'unlockContent',
         component: 'toggle',
         label: 'Content Editting',
         description: 'Enable to unlock content editing ',
-      }
+      },
     ],
 
 
     // save & commit the file when the "save" button is pressed
     onSubmit(data) {
-      const content = draftToMarkdown(data.content)
+      const content = draftToMarkdown(data.content);
       return cms.api.git
         .writeToDisk({
           fileRelativePath: props.fileRelativePath,
@@ -116,33 +113,32 @@ export default function Page(props: Props) {
             {
               ...originalData.data,
               title: data.title,
-              hero: data.hero
+              hero: data.hero,
             },
-            content
-          )
+            content,
+          ),
         })
-        .then(() => {
-          return cms.api.git.commit({
-            files: [props.fileRelativePath],
-            message: `Commit from Tina: Update ${props.fileRelativePath}`
-          });
-        })
+        .then(() => cms.api.git.commit({
+          files: [props.fileRelativePath],
+          message: `Commit from Tina: Update ${props.fileRelativePath}`,
+        }))
         .then(() => window.location.reload())
-        .catch(err => alert(err));
-
+        // TODO: need to be change into snackbar
+        // eslint-disable-next-line no-alert
+        .catch((err) => alert(err));
     },
 
-    reset:() => {
+    reset: () => {
 
-    }
+    },
   });
 
   useWatchFormValues(form, () => {
   });
 
-  let hero = undefined;
+  let hero;
   if (newPost.hero) {
-    if (newPost.hero.includes("http")) {
+    if (newPost.hero.includes('http')) {
       hero = newPost.hero;
     } else {
       hero = `/${newPost.hero}`;
@@ -151,7 +147,7 @@ export default function Page(props: Props) {
 
   return (
     <Layout
-      transparent={scrollY == 0 || scrollY < window.innerHeight * 0.65}
+      transparent={scrollY === 0 || scrollY < window.innerHeight * 0.65}
       black={scrollY >= window.innerHeight * 0.55}
     >
       <div className="header">
@@ -166,16 +162,16 @@ export default function Page(props: Props) {
         </div>
       </div>
       <div className="content container">
-        {!newPost.unlockContent?
-          <ReactMarkdown className="post" source={post.content} />
-          : (form &&
-         <Editor 
+        {!newPost.unlockContent
+          ? <ReactMarkdown className="post" source={post.content} />
+          : (form
+         && <Editor
            meta={{}}
-           field={{name:"", label: ""}}
-           input={{name: '', value: newPost.content, onChange: e => form.finalForm.change("content", e) }}/>
+           field={{ name: '', label: '' }}
+           input={{ name: '', value: newPost.content, onChange: (e) => form.finalForm.change('content', e) }}/>
           )
         }
-        
+
       </div>
       <div className="container post-navigator">
         <div className="prev">
@@ -268,14 +264,14 @@ export default function Page(props: Props) {
   );
 }
 
-Page.getInitialProps = function(ctx) {
+Page.getInitialProps = (ctx) => {
   const { slug } = ctx.query;
-  // $FlowFixMe need to check this later
-  let content = require(`../../../posts/${slug}.md`);
-  let data = matter(content.default);
+  // $FlowFixMe
+  const content = require(`../../../posts/${slug}.md`); // eslint-disable-line import/no-dynamic-require, global-require
+  const data = matter(content.default);
   return {
-    slug: slug,
+    slug,
     post: data,
-    fileRelativePath: `/posts/${slug}.md`
+    fileRelativePath: `/posts/${slug}.md`,
   };
 };

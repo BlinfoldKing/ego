@@ -2,11 +2,11 @@
 import React from 'react';
 import Link from 'next/link';
 
-import type {Node} from 'react';
+import type { Node } from 'react';
 import type { Post } from '../types/post.type';
 
 type Props = {
-	posts: [Post]
+  posts: [Post]
 };
 
 const activeStyle = (post) => `
@@ -24,12 +24,12 @@ background-image: white;
 `;
 
 const handleEnter = (post) => () => {
-  let bg = document.getElementById('background');
+  const bg = document.getElementById('background');
   if (bg) bg.style.cssText = activeStyle(post);
 };
 
 const hanldeLeave = () => {
-  let bg = document.getElementById('background');
+  const bg = document.getElementById('background');
   if (bg) bg.style.cssText = regularStyle;
 };
 

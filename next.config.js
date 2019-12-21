@@ -11,32 +11,33 @@ module.exports = {
       withSass({
         enableSvg: true,
         // eslint-disable-next-line no-unused-vars
-        webpack(config, opts) {
+        webpack(_config, opts) {
+          const config = _config;
           if (!opts.isServer) {
             config.node = {
-              fs: 'empty'
+              fs: 'empty',
             };
           }
           config.module.rules.push({
             test: /\.md$/,
-            use: 'raw-loader'
+            use: 'raw-loader',
           });
 
           config.module.rules.push({
             test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-            loader: 'url-loader?limit=100000'
+            loader: 'url-loader?limit=100000',
           });
 
           // config.plugins.push(new FlowWebpackPlugin());
           config.plugins.push(new webpack.IgnorePlugin(/\.flow$/));
           return config;
-        }
-      })
-    )
+        },
+      }),
+    ),
   ),
 
   env: {
     dev: process.env.NODE_ENV !== 'production',
-    baseUrl: process.env.BASE_URL || ''
-  }
+    baseUrl: process.env.BASE_URL || '',
+  },
 };

@@ -1,23 +1,21 @@
 // @flow
-import React from "react";
+import React from 'react';
 // eslint-disable-next-line no-unused-vars
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import {
   EditorState,
   RichUtils,
   convertToRaw,
   SelectionState,
-  convertFromRaw
-} from "draft-js";
-import Editor, {createEditorStateWithText} from 'draft-js-plugins-editor'
+  convertFromRaw,
+} from 'draft-js';
+import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 
-import createAutoListPlugin from 'draft-js-autolist-plugin'
+import createAutoListPlugin from 'draft-js-autolist-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
-import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import './editor.scss';
-
 
 
 type Field = {
@@ -46,34 +44,20 @@ type State = {
     }
 };
 
-type Action = {
-    icon: Node,
-    tooltip?: string | "",
-    onClick?: void => void,
-    title?: string | "unknown"
-};
-
-
 const sideToolbarPlugin = createSideToolbarPlugin();
-const autoListPlugin = createAutoListPlugin()
+const autoListPlugin = createAutoListPlugin();
 
 const plugins = [
   autoListPlugin,
-  sideToolbarPlugin
-]
+  sideToolbarPlugin,
+];
 
 const { SideToolbar } = sideToolbarPlugin;
 
 export default class TextEditor extends React.Component<Props, State> {
     state: State;
 
-    actions: Array<Action>;
-    plugins: Array<any>;
 
-    componentDidMount() {
-      
-    }
-    
     constructor(props: Props) {
       super(props);
       this.state = {
@@ -82,25 +66,16 @@ export default class TextEditor extends React.Component<Props, State> {
           italic: false,
           block: false,
           code: false,
-        }, 
-        editorState: props.input.value ?  
-          EditorState.createWithContent(convertFromRaw(props.input.value))
-          : createEditorStateWithText('')
+        },
+        editorState: props.input.value
+          ? EditorState.createWithContent(convertFromRaw(props.input.value))
+          : createEditorStateWithText(''),
       };
     }
 
-    
 
     onChange = (editorState: EditorState) => {
-      // eslint-disable-next-line no-console
-      // if (editorState.getCurrentContent().hasText()) {
       this.setState({ editorState });
-      // } else {
-      //   this.setState({
-      //     editorState: EditorState.createEmpty()
-      //   });
-      // }
-
       const raw = convertToRaw(editorState.getCurrentContent());
       this.props.input.onChange(raw);
     };
@@ -120,7 +95,7 @@ export default class TextEditor extends React.Component<Props, State> {
         anchorKey: key,
         anchorOffset: length,
         focusKey: key,
-        focusOffset: length
+        focusOffset: length,
       });
       return EditorState.forceSelection(editorState, selection);
     };
@@ -134,9 +109,9 @@ export default class TextEditor extends React.Component<Props, State> {
       const newState = RichUtils.handleKeyCommand(editorState, command);
       if (newState) {
         this.onChange(newState);
-        return "handled";
+        return 'handled';
       }
-      return "not-handled";
+      return 'not-handled';
     }
 
     render() {
@@ -146,7 +121,7 @@ export default class TextEditor extends React.Component<Props, State> {
             {this.props.field.label}
           </label>
           <div
-            className="editor" 
+            className="editor"
           >
             <Editor
               plugins={plugins}

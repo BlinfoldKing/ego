@@ -1,20 +1,20 @@
 // @flow
-import React from "react";
-import matter from "gray-matter";
+import React from 'react';
+import matter from 'gray-matter';
 
-import { useCMS, useLocalForm, useWatchFormValues } from "tinacms";
-import { useRouter } from "next/router";
+import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
+import { useRouter } from 'next/router';
 
-import Layout from "../components/layout";
-import BlogList from "../components/blogList";
+import Layout from '../components/layout';
+import BlogList from '../components/blogList';
 
-import datePrefix from "../utils/datePrefix";
-import generateMarkdown from "../utils/generateMarkdown";
-import About from "../components/about";
+import datePrefix from '../utils/datePrefix';
+import generateMarkdown from '../utils/generateMarkdown';
+import About from '../components/about';
 
-import type { Post } from "../types/post.type";
+import type { Post } from '../types/post.type';
 
-const metadata = require("../site.config").default;
+const metadata = require('../site.config').default;
 
 // const requireContext = require('require-context');
 
@@ -23,17 +23,17 @@ type Props = {
 };
 
 const Index = (props: Props) => {
-  let cms = useCMS();
-  let router = useRouter();
-  let [, form] = useLocalForm({
-    id: "add-post",
-    label: "Add Post",
+  const cms = useCMS();
+  const router = useRouter();
+  const [, form] = useLocalForm({
+    id: 'add-post',
+    label: 'Add Post',
 
     // starting values for the post object
     initialValues: {
       slug: undefined,
       title: undefined,
-      platinaTest: undefined
+      platinaTest: undefined,
     },
 
     reset: () => {},
@@ -41,15 +41,15 @@ const Index = (props: Props) => {
     // field definition
     fields: [
       {
-        name: "slug",
-        label: "Slug",
-        component: "text"
+        name: 'slug',
+        label: 'Slug',
+        component: 'text',
       },
       {
-        name: "title",
-        label: "Title",
-        component: "text"
-      }
+        name: 'title',
+        label: 'Title',
+        component: 'text',
+      },
     ],
 
     // save & commit the file when the "save" button is pressed
@@ -57,53 +57,51 @@ const Index = (props: Props) => {
       const slug = datePrefix(data.slug);
       const filepath = `/posts/${slug}.md`;
       const lastPost = props.posts[props.posts.length - 1];
-      const prev =
-                props.posts.length > 0
-                  ? {
-                    prev: lastPost.slug,
-                    prevTitle: lastPost.document.data.title
-                  }
-                  : {};
+      const prev = props.posts.length > 0
+        ? {
+          prev: lastPost.slug,
+          prevTitle: lastPost.document.data.title,
+        }
+        : {};
       return cms.api.git
         .writeToDisk({
           fileRelativePath: filepath,
           content: generateMarkdown(
             {
               title: data.title,
-              hero: "",
-              ...prev
+              hero: '',
+              ...prev,
             },
-            data.content
-          )
+            data.content,
+          ),
         })
         .then(() => {
           if (props.posts.length < 1) {
             return;
           }
 
-          return cms.api.git.writeToDisk({
+          cms.api.git.writeToDisk({
             fileRelativePath: `posts/${lastPost.slug}.md`,
             content: generateMarkdown(
               {
                 ...lastPost.document.data,
                 next: slug,
-                nextTitle: data.title
+                nextTitle: data.title,
               },
-              lastPost.document.content
-            )
+              lastPost.document.content,
+            ),
           });
         })
+        .then(() => cms.api.git.commit({
+          files: [filepath],
+          message: `New file from Tina: Update ${filepath}`,
+        }))
         .then(() => {
-          return cms.api.git.commit({
-            files: [filepath],
-            message: `New file from Tina: Update ${filepath}`
-          });
+          router.push(`/story/${slug}`);
         })
-        .then(() => {
-          router.push("/story/" + slug);
-        })
-        .catch(err => alert(err));
-    }
+        // eslint-disable-next-line no-alert
+        .catch((err) => alert(err));
+    },
   });
 
   useWatchFormValues(form, () => {});
@@ -161,31 +159,31 @@ const Index = (props: Props) => {
   );
 };
 
-Index.getInitialProps = async function() {
-  //get posts & context from folder
-  const posts = (context => {
+Index.getInitialProps = async () => {
+  // get posts & context from folder
+  const posts = ((context) => {
     const keys = context.keys();
     const values = keys.map(context);
     const data = keys.map((key, index) => {
       // Create slug from filename
       const slug = key
-        .replace(/^.*[\\/]/, "")
-        .split(".")
+        .replace(/^.*[\\/]/, '')
+        .split('.')
         .slice(0, -1)
-        .join(".");
+        .join('.');
       const value = values[index];
       const document = matter(value.default);
       return {
         document,
-        slug
+        slug,
       };
     });
     return data;
     // $FlowFixMe https://github.com/zeit/next.js/issues/4614
-  })(require.context("../../posts", true, /\.md$/));
+  })(require.context('../../posts', true, /\.md$/));
 
   return {
-    posts: posts.reverse()
+    posts: posts.reverse(),
   };
 };
 

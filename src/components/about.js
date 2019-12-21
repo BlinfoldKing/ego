@@ -20,21 +20,21 @@ const About = () => (
     </div>
     <style jsx>
       {`
-				p {
-					max-width: 30vw;
-					margin-bottom: 30px;
-				}
-				a {
-					color: inherit;
-					margin: 15px;
-				}
+      p {
+        max-width: 30vw;
+        margin-bottom: 30px;
+      }
+      a {
+        color: inherit;
+        margin: 15px;
+      }
 
-				h1 {
-					color: white;
-					width: 100vw;
-					background: linear-gradient(to right, #333, #222, #22222222, #11111100);
-				}
-			`}
+      h1 {
+        color: white;
+        width: 100vw;
+        background: linear-gradient(to right, #333, #222, #22222222, #11111100);
+      }
+    `}
     </style>
   </div>
 );
