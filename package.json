@@ -47,6 +47,11 @@
     "start": "cross-env NODE_ENV=production node server.js",
     "deploy": "docker-compose up --build"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx eslint . --fix"
+    }
+  },
   "devDependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.7.4",
     "@babel/preset-flow": "^7.7.4",
@@ -58,6 +63,7 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-react": "^7.17.0",
     "flow-bin": "^0.114.0",
-    "flow-webpack-plugin": "^1.2.0"
+    "flow-webpack-plugin": "^1.2.0",
+    "husky": "^3.1.0"
   }
 }
