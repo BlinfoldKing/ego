@@ -1,7 +1,6 @@
 const withSass = require('@zeit/next-sass');
 const withCSS = require('@zeit/next-css');
 const withFonts = require('next-fonts');
-// const FlowWebpackPlugin = require('flow-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {

@@ -12,7 +12,7 @@
     "airbnb-base"
   ],
   "plugins": [
-    "flowtype",
+    "flowtype"
   ],
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -21,7 +21,7 @@
   "rules": {
     "no-console": "error",
     "no-eval": "error",
-    "indent": ["error", 2],
+    "indent": ["error", 2]
   },
   "settings": {
   "react": {
