@@ -24,30 +24,30 @@ background-image: white;
 `;
 
 const handleEnter = (post) => () => {
-	let bg = document.getElementById('background');
-	if (bg) bg.style.cssText = activeStyle(post);
+  let bg = document.getElementById('background');
+  if (bg) bg.style.cssText = activeStyle(post);
 };
 
 const hanldeLeave = () => {
-	let bg = document.getElementById('background');
-	if (bg) bg.style.cssText = regularStyle;
+  let bg = document.getElementById('background');
+  if (bg) bg.style.cssText = regularStyle;
 };
 
 const BlogList = (props: Props) => {
-	const { posts } = props;
-	const renderPost = (post, index): Node => (
-		<Link href={`/story/${post.slug}`} key={index}>
-			<a>
-				<span
-					dangerouslySetInnerHTML={{ __html: post.document.data.title }}
-					className="title is-2 is-active"
-					onMouseEnter={handleEnter(post)}
-					onMouseLeave={hanldeLeave}
-				/>
-			</a>
-		</Link>
-	);
-	return posts.map<any>(renderPost);
+  const { posts } = props;
+  const renderPost = (post, index): Node => (
+    <Link href={`/story/${post.slug}`} key={index}>
+      <a>
+        <span
+          dangerouslySetInnerHTML={{ __html: post.document.data.title }}
+          className="title is-2 is-active"
+          onMouseEnter={handleEnter(post)}
+          onMouseLeave={hanldeLeave}
+        />
+      </a>
+    </Link>
+  );
+  return posts.map<any>(renderPost);
 };
 
 export default BlogList;

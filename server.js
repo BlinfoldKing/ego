@@ -9,25 +9,25 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-	const server = express();
+  const server = express();
 
-	server.use(cors());
-	server.use(
-		'/___tina',
-		gitApi.router({
-			pushOnCommit: false
-		})
-	);
+  server.use(cors());
+  server.use(
+    '/___tina',
+    gitApi.router({
+      pushOnCommit: false
+    })
+  );
 
-	server.all('*', (req, res) => {
-		return handle(req, res);
-	});
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
 
-	server.listen(port, (err) => {
-		if (err) throw err;
-		// eslint-disable-next-line no-console
-		console.log(`> Ready on http://localhost:${port}`);
-	});
+  server.listen(port, (err) => {
+    if (err) throw err;
+    // eslint-disable-next-line no-console
+    console.log(`> Ready on http://localhost:${port}`);
+  });
 
-	server.use('/tmp', express.static('tmp'));
+  server.use('/tmp', express.static('tmp'));
 });

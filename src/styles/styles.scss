@@ -1,5 +1,10 @@
 @import "../../node_modules/bulma/bulma.sass";
 @import "../../node_modules/victormono/dist/index.css";
+@import "../../node_modules/draft-js/dist/Draft.css";
+
+.editor {
+  border: solid 1px red;
+}
 
 @font-face {
   font-family: Blanka;
