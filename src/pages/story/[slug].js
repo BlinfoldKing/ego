@@ -162,11 +162,9 @@ export default function Page(props: Props) {
       </div>
       <div className="content container">
         {!newPost.unlockContent
-          ? <ReactMarkdown className="post" source={post.content} />
-          // ? (
-          //   <div
-          //     dangerouslySetInnerHTML={{ __html: draftToHtml(newPost.content) }}></div>
-          // )
+          ? <ReactMarkdown className="post" source={
+            draftjsToMd(newPost.content)
+          } />
           : (form
          && <Editor
            meta={{}}

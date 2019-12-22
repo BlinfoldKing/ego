@@ -176,16 +176,17 @@ export default class TextEditor extends React.Component<Props, State> {
                     </span>
                   </label>
                 </div>
-                {
-                  this.state.uploading
-                  && <div style={{ width: '100%' }}>
-                    <BarLoader
+                <div style={{ width: '100%' }}>
+                  {
+                    this.state.uploading
+                    && <BarLoader
                       size={'100%'}
+                      css={{ width: '100%' }}
                       color={'hsl(204, 86%, 53%)'}
                       loading={this.state.uploading}
                     />
-                  </div>
-                }
+                  }
+                </div>
                 <span style={{
                   textAlign: 'center',
                   width: '100%',
