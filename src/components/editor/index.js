@@ -132,7 +132,10 @@ export default class TextEditor extends React.Component<Props, State> {
               <section className="modal-card-body">
                 <div className="file has-name is-fullwidth">
                   <label className="file-label">
-                    <input className="file-input" type="file" name="image" onChange={(e) => console.log(e.target.value)}/>
+                    <input className="file-input" type="file" name="image" onChange={
+                      // eslint-disable-next-line no-console
+                      (e) => console.log(e.target.value)
+                    }/>
                     <span className="file-cta">
                       <span className="file-icon">
                         <i className="fas fa-upload"></i>
