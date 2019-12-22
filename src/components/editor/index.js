@@ -14,7 +14,6 @@ import {
 } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import {
-  HeadlineOneButton,
   HeadlineTwoButton,
   HeadlineThreeButton,
   BlockquoteButton,
@@ -22,14 +21,19 @@ import {
   OrderedListButton,
   UnorderedListButton,
 } from 'draft-js-buttons';
+
 import createAutoListPlugin from 'draft-js-autolist-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
+import createMarkdownPlugin from 'draft-js-markdown-plugin';
+import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 
 import axios from 'axios';
 
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import 'draft-js-image-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
+
 import './editor.scss';
 
 
@@ -56,9 +60,15 @@ type State = {
     uploading: boolean
 };
 
+const languages = {
+  auto: 'automatic',
+};
+
+const markdownPlugin = createMarkdownPlugin({ languages });
 const sideToolbarPlugin = createSideToolbarPlugin();
 const autoListPlugin = createAutoListPlugin();
 const imagePlugin = createImagePlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
 
 const { addImage } = imagePlugin;
 
@@ -66,8 +76,11 @@ const plugins = [
   autoListPlugin,
   sideToolbarPlugin,
   imagePlugin,
+  markdownPlugin,
+  inlineToolbarPlugin,
 ];
 
+const { InlineToolbar } = inlineToolbarPlugin;
 const { SideToolbar } = sideToolbarPlugin;
 
 export default class TextEditor extends React.Component<Props, State> {
@@ -238,16 +251,16 @@ export default class TextEditor extends React.Component<Props, State> {
           >
             <Editor
               plugins={plugins}
-              handleKeyCommand={this.handleKeyCommand.bind(this)}
               editorState={this.state.editorState}
               onChange={this.onChange}
               onFocus={() => this.onFocus()}
               placeholder="Enter Your Text Below"
             />
+            <InlineToolbar />
             <SideToolbar>
               {(externalProps) => (
                 <div>
-                  <HeadlineOneButton {...externalProps} />
+                  {/* <HeadlineOneButton {...externalProps} /> */}
                   <HeadlineTwoButton {...externalProps} />
                   <HeadlineThreeButton {...externalProps} />
                   <BlockquoteButton {...externalProps} />

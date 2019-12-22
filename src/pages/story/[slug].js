@@ -13,6 +13,7 @@ import Layout from '../../components/layout';
 import type { Document } from '../../types/document.type';
 
 import Editor from '../../components/editor';
+import CodeBlock from '../../components/codeblock';
 
 type Props = {
     post: Document,
@@ -162,9 +163,12 @@ export default function Page(props: Props) {
       </div>
       <div className="content container">
         {!newPost.unlockContent
-          ? <ReactMarkdown className="post" source={
-            draftjsToMd(newPost.content)
-          } />
+          ? <ReactMarkdown
+            className="post"
+            renderers={{ code: CodeBlock }}
+            source={
+              post.content
+            } />
           : (form
          && <Editor
            meta={{}}
