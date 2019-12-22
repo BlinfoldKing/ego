@@ -2,6 +2,9 @@
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import ReactDOM from 'react-dom';
+
+import { BarLoader } from 'react-spinners';
+
 import {
   EditorState,
   RichUtils,
@@ -22,6 +25,8 @@ import {
 import createAutoListPlugin from 'draft-js-autolist-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
+
+import axios from 'axios';
 
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import 'draft-js-image-plugin/lib/plugin.css';
@@ -48,6 +53,7 @@ type State = {
     editorState: EditorState,
     modalIsActive: boolean,
     imageUri?: string,
+    uploading: boolean
 };
 
 const sideToolbarPlugin = createSideToolbarPlugin();
@@ -75,6 +81,7 @@ export default class TextEditor extends React.Component<Props, State> {
           ? EditorState.createWithContent(convertFromRaw(props.input.value))
           : createEditorStateWithText(''),
         modalIsActive: false,
+        uploading: false,
       };
     }
 
@@ -134,20 +141,51 @@ export default class TextEditor extends React.Component<Props, State> {
                   <label className="file-label">
                     <input className="file-input" type="file" name="image" onChange={
                       // eslint-disable-next-line no-console
-                      (e) => console.log(e.target.value)
+                      (e) => {
+                        const files = Array.from(e.target.files);
+                        // this.setState({ uploading: true });
+
+                        const formData = new FormData();
+
+                        files.forEach((file, i) => {
+                          formData.append(`${i}`, file);
+                        });
+
+                        this.setState({ uploading: true });
+                        axios.request({
+                          method: 'post',
+                          url: 'http://localhost:3000/image-upload',
+                          headers: { 'Content-Type': 'multipart/form-data' },
+                          data: formData,
+                        }).then((res) => {
+                          const image = res.data[0];
+                          this.setState({ imageUri: image.url, uploading: false });
+                        });
+                      }
                     }/>
                     <span className="file-cta">
                       <span className="file-icon">
                         <i className="fas fa-upload"></i>
                       </span>
                       <span className="file-label">
-                        Choose a file…
+                        Choose an image…
                       </span>
                     </span>
                     <span className="file-name">
+                      {this.state.imageUri}
                     </span>
                   </label>
                 </div>
+                {
+                  this.state.uploading
+                  && <div style={{ width: '100%' }}>
+                    <BarLoader
+                      size={'100%'}
+                      color={'hsl(204, 86%, 53%)'}
+                      loading={this.state.uploading}
+                    />
+                  </div>
+                }
                 <span style={{
                   textAlign: 'center',
                   width: '100%',
@@ -160,7 +198,8 @@ export default class TextEditor extends React.Component<Props, State> {
                     type="text"
                     onChange={(e) => this.setState({
                       imageUri: e.target.value,
-                    })}/>
+                    })}
+                  />
                 </div>
               </section>
               <footer className="modal-card-foot">
