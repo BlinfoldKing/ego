@@ -4,8 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import React, { useState, useEffect } from 'react';
 import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
 
-// import draftToHtml from "draftjs-to-html";
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
+import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
 
 import Link from 'next/link';
 import generateMarkdown from '../../utils/generateMarkdown';
@@ -66,7 +65,7 @@ export default function Page(props: Props) {
     initialValues: {
       title: post.data.title,
       hero: post.data.hero,
-      content: markdownToDraft(post.content),
+      content: mdToDraftjs(post.content),
     },
 
     // field definition
@@ -105,7 +104,7 @@ export default function Page(props: Props) {
 
     // save & commit the file when the "save" button is pressed
     onSubmit(data) {
-      const content = draftToMarkdown(data.content);
+      const content = draftjsToMd(data.content);
       return cms.api.git
         .writeToDisk({
           fileRelativePath: props.fileRelativePath,
@@ -164,6 +163,10 @@ export default function Page(props: Props) {
       <div className="content container">
         {!newPost.unlockContent
           ? <ReactMarkdown className="post" source={post.content} />
+          // ? (
+          //   <div
+          //     dangerouslySetInnerHTML={{ __html: draftToHtml(newPost.content) }}></div>
+          // )
           : (form
          && <Editor
            meta={{}}
