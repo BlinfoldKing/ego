@@ -32,6 +32,7 @@ app.prepare().then(() => {
   );
 
   server.get('/ping', (req, res) => res.json({ ping: 'pong' }));
+
   server.post('/image-upload', (req, res) => {
     const values = Object.values(req.files);
     const promises = values.map((image) => cloudinary.uploader

@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
 import { useRouter } from 'next/router';
 
+import nookies from 'nookies';
 import Layout from '../components/layout';
 import BlogList from '../components/blogList';
 
@@ -19,7 +20,9 @@ const metadata = require('../site.config').default;
 // const requireContext = require('require-context');
 
 type Props = {
-    posts: [Post]
+    posts: [Post],
+    token?: string,
+    username?: string
 };
 
 const Index = (props: Props) => {
@@ -159,7 +162,7 @@ const Index = (props: Props) => {
   );
 };
 
-Index.getInitialProps = async () => {
+Index.getInitialProps = async (ctx) => {
   // get posts & context from folder
   const posts = ((context) => {
     const keys = context.keys();
@@ -182,8 +185,12 @@ Index.getInitialProps = async () => {
     // $FlowFixMe https://github.com/zeit/next.js/issues/4614
   })(require.context('../../posts', true, /\.md$/));
 
+  const cookie = nookies.get(ctx, 'cookie');
+
   return {
     posts: posts.reverse(),
+    token: cookie.ego_token,
+    username: cookie.ego_username,
   };
 };
 

@@ -6,6 +6,8 @@ import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
 
 import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
 
+import nookies from 'nookies';
+
 import Link from 'next/link';
 import generateMarkdown from '../../utils/generateMarkdown';
 import Layout from '../../components/layout';
@@ -18,7 +20,9 @@ import CodeBlock from '../../components/codeblock';
 type Props = {
     post: Document,
     fileRelativePath: string,
-    slug: string
+    slug: string,
+    token?: string,
+    username: string
 };
 
 function debounce(func, wait = 20, immediate = true) {
@@ -274,9 +278,14 @@ Page.getInitialProps = (ctx) => {
   // $FlowFixMe
   const content = require(`../../../posts/${slug}.md`); // eslint-disable-line import/no-dynamic-require, global-require
   const data = matter(content.default);
+
+  const cookie = nookies.get(ctx, 'cookie');
+
   return {
     slug,
     post: data,
     fileRelativePath: `/posts/${slug}.md`,
+    token: cookie.ego_token,
+    username: cookie.ego_username,
   };
 };
