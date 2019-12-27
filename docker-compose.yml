@@ -4,23 +4,31 @@ services:
     build:
       context: ./
       dockerfile: ./docker/Dockerfile.dev
-    volumes: 
-        - ./posts:/app/posts
-        - ./public:/app/public
-  www:
-    build:
-      context: ./
-      dockerfile: ./docker/Dockerfile.prod
     volumes:
         - ./posts:/app/posts
         - ./public:/app/public
-  nginx: 
-    image: nginx:latest
-    depends_on:
-        - cms
-        - www
-    volumes:
-        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  api:
+    build: ./api
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: postgres
     ports:
-        - 80:80
-        - 443:443
+        - 5432:5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+ # nginx:
+ #    image: nginx:latest
+ #    depends_on:
+ #        - cms
+ #        - www
+ #    volumes:
+ #        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+ #    ports:
+ #        - 80:80
+ #        - 443:443
