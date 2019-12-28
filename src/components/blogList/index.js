@@ -13,8 +13,8 @@ import './blogList.scss';
 import type { Node } from 'react';
 
 const POST_LIST = gql`
-  {
-    posts: GetAllPosts(limit: 10, offset: 0) {
+  query GetAllPosts($limit: Int!, $offset: Int!) {
+    posts: GetAllPosts(limit: $limit, offset: $offset) {
       title
       slug
       banner
@@ -38,11 +38,21 @@ background-size: cover;
 
 
 const BlogList = () => {
-  const { loading, error, data } = useQuery(POST_LIST, {
-    fetchPolicy: 'network-only',
+  const [selectedPost, setPost] = useState('');
+  const [pagination, setPage] = useState({
+    limit: 10,
+    offset: 0,
   });
 
-  const [selectedPost, setPost] = useState('');
+  const {
+    loading, error, data, fetchMore,
+  } = useQuery(POST_LIST, {
+    fetchPolicy: 'network-only',
+    variables: {
+      limit: pagination.limit,
+      offset: pagination.offset,
+    },
+  });
 
   const renderPost = (post): Node => (
     <div
@@ -81,6 +91,33 @@ const BlogList = () => {
   if (!loading && !error) {
     return <div>
       {data.posts.map<any>(renderPost)}
+      <div className="load-more">
+        <a href="#footer">
+          <span
+            onClick={() => {
+              setPage({
+                limit: pagination.limit,
+                offset: (pagination.limit * (pagination.offset + 1)) + 1,
+              });
+
+              fetchMore({
+                variables: {
+                  offset: pagination.offset,
+                },
+                updateQuery: (prev, { fetchMoreResult }) => ({
+                  ...prev,
+                  posts: [...fetchMoreResult.posts, ...prev.posts],
+                }),
+              });
+            }}
+            className="title is-2 is-active load-more-button">
+            <i>Load More</i>
+          </span>
+        </a>
+        <div className="foot-note" id="footer">
+              made with 🔥 by <a href="https://github.com/blinfoldking">blinfoldking</a>
+        </div>
+      </div>
     </div>;
   }
   return <div>

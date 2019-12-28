@@ -210,6 +210,7 @@ export default function Page(props: Props) {
       black={scrollY >= window.innerHeight * 0.55}
     >
       <div className="header">
+        <div className="header-overlay"></div>
         { newPost.unlockContent
           && <div className="file-uploader container" {...getRootProps()}>
             <input {...getInputProps()} />
@@ -253,7 +254,7 @@ export default function Page(props: Props) {
         }
 
       </div>
-      <div className="separator"></div>
+      {/* <div className="separator"></div> */}
       <div className="container post-navigator">
         <div className="prev">
           {post.prev && (
@@ -288,15 +289,23 @@ export default function Page(props: Props) {
       <style jsx>{`
                 .header {
                     height: 60vh;
-                    background-image: linear-gradient(
-                            to bottom,
-                            rgba(245, 246, 252, 0),
-                            rgba(255, 255, 255, 1)
-                        ),
-                        url(${files[0] ? files[0].preview : newPost.banner});
+                    background-attachment: fixed;
                     background-size: cover;
+                    background-image: url(${files[0] ? files[0].preview : newPost.banner});
                     display: flex;
                     align-items: flex-end;
+                }
+
+                .header-overlay {
+                  content: "";
+                  width: 100vw;
+                  height: inherit;
+                  position: absolute;
+                  background-image: linear-gradient(
+                          to bottom,
+                          rgba(0, 0, 0, 0),
+                          rgba(255, 255, 255, 1)
+                      );
                 }
 
                 .header a {
@@ -325,6 +334,7 @@ export default function Page(props: Props) {
                 .post-navigator {
                     display: flex;
                     padding: 30px 10vw;
+                    border-top: dashed 1px black;
                     justify-content: space-between;
                 }
 
@@ -334,6 +344,7 @@ export default function Page(props: Props) {
                   width: 100vw;
                   background-size: cover;
                   background-position: center;
+                  background-attachment: fixed;
                   background-image: linear-gradient(
                           to left,
                           rgba(255, 255, 255, 1),

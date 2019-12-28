@@ -100,13 +100,7 @@ const Index = (props: Props) => {
                 <div className="title is-2 spacer">&nbsp;</div>
                 <div className="title is-2 spacer">&nbsp;</div>
                 <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
                 <BlogList posts={props.posts} />
-                <h2 className="title is-2 spacer">&nbsp;</h2>
-                <h2 className="title is-2 spacer">&nbsp;</h2>
-                <h2 className="title is-2 spacer">&nbsp;</h2>
-                <h2 className="title is-2 spacer">&nbsp;</h2>
-                <h2 className="title is-2 spacer">&nbsp;</h2>
               </div>
             ) : (
               <About />
