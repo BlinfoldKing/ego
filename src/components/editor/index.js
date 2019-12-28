@@ -167,7 +167,8 @@ export default class TextEditor extends React.Component<Props, State> {
                         this.setState({ uploading: true });
                         axios.request({
                           method: 'post',
-                          url: 'http://localhost:3000/image-upload',
+                          // $FlowFixMe
+                          url: `${process.env.baseUrl}/image-upload`,
                           headers: { 'Content-Type': 'multipart/form-data' },
                           data: formData,
                         }).then((res) => {

@@ -101,23 +101,6 @@ nav {
     &::-webkit-scrollbar {
       display: none;
     }
-    span {
-      display: block;
-    }
-    .title {
-      // color: #999;
-      font-size: 3.5rem;
-      margin-bottom: 0;
-    }
-
-    .title:hover:not(.spacer) {
-      color: white;
-      font-size: 4rem;
-      cursor: pointer;
-      // background-color: #333;
-      background: linear-gradient(to right, #333, #222, #22222222, #11111100);
-      width: 100vw;
-    }
   }
 }
 

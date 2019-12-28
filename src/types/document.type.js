@@ -2,7 +2,7 @@
 export type Document = {
   data: {
     title: string,
-    hero: string,
+    banner: string,
     next: string,
     nextTitle: string,
     prev: string,

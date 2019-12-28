@@ -1,15 +1,16 @@
 // @flow
-import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
-import React, { useState, useEffect } from 'react';
-import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
-
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocalForm, useWatchFormValues } from 'tinacms';
+import { useDropzone } from 'react-dropzone';
+import { gql, ApolloClient } from 'apollo-boost';
+import axios from 'axios';
 import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
+import { ScaleLoader } from 'react-spinners';
 
 import nookies from 'nookies';
 
 import Link from 'next/link';
-import generateMarkdown from '../../utils/generateMarkdown';
 import Layout from '../../components/layout';
 
 import type { Document } from '../../types/document.type';
@@ -17,12 +18,72 @@ import type { Document } from '../../types/document.type';
 import Editor from '../../components/editor';
 import CodeBlock from '../../components/codeblock';
 
+import MutationClient from '../../utils/apolloMutationClient';
+
+const POST_DETAIL = gql`
+query Post($slug: String!){
+  post: FindPostBySlug(slug: $slug) {
+    id
+    title
+    slug
+    content
+    banner
+    next {
+      title
+      slug
+    }
+    prev {
+      title
+      slug
+    }
+  }
+}
+`;
+
+const POST_UPDATE = gql`
+mutation Post($id: Uuid!, $title: String, $content: String, $banner: String) {
+  post: UpdatePostById(id: $id, updatePostInput: {
+    title: $title
+    content: $content,
+    banner: $banner
+  }) {
+    id
+    title
+    content
+    banner
+  }
+}
+`;
+
+const uploadFile = async (files: any) => {
+  const formData = new FormData();
+
+  files.forEach((file, i) => {
+    formData.append(`${i}`, file);
+  });
+
+  const ret = await axios.request({
+    method: 'post',
+    // $FlowFixMe
+    url: `${process.env.baseUrl}/image-upload`,
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: formData,
+  }).then((res) => {
+    const image = res.data[0];
+    return image.url;
+  });
+
+  return ret;
+};
+
 type Props = {
     post: Document,
     fileRelativePath: string,
     slug: string,
     token?: string,
-    username: string
+    username: string,
+    post: any,
+    apolloClient: ApolloClient
 };
 
 function debounce(func, wait = 20, immediate = true) {
@@ -56,21 +117,18 @@ export default function Page(props: Props) {
   }, [debounce]);
 
   // grab the instance of the cms to access the registered git API
-  const cms = useCMS();
-
   const { post } = props;
-  const originalData = post;
 
-  // add a form to the CMS; store form data in `post`
   const [newPost, form] = useLocalForm({
-    id: props.fileRelativePath, // needs to be unique
+    id: post.id, // needs to be unique
     label: 'Edit Post',
 
     // starting values for the post object
     initialValues: {
-      title: post.data.title,
-      hero: post.data.hero,
+      title: post.title,
+      banner: post.banner,
       content: mdToDraftjs(post.content),
+      unlockContent: false,
     },
 
     // field definition
@@ -79,24 +137,6 @@ export default function Page(props: Props) {
         name: 'title',
         label: 'Title',
         component: 'text',
-      },
-      {
-        name: 'hero',
-        label: 'Thumbnail',
-        component: 'image',
-        parse: (filename) => `${filename}`,
-
-        previewSrc: (formValues) => {
-          if (formValues.hero) {
-            if (!formValues.hero.includes('http')) {
-              return `/${formValues.hero}`;
-            }
-          }
-
-          return formValues.hero;
-        },
-
-        uploadDir: () => '/public/',
       },
       {
         name: 'unlockContent',
@@ -110,23 +150,19 @@ export default function Page(props: Props) {
     // save & commit the file when the "save" button is pressed
     onSubmit(data) {
       const content = draftjsToMd(data.content);
-      return cms.api.git
-        .writeToDisk({
-          fileRelativePath: props.fileRelativePath,
-          content: generateMarkdown(
-            {
-              ...originalData.data,
-              title: data.title,
-              hero: data.hero,
-            },
-            content,
-          ),
+      MutationClient(props.token ?? '').mutate({
+        mutation: POST_UPDATE,
+        variables: {
+          content,
+          title: data.title,
+          id: props.post.id,
+          banner: data.banner,
+        },
+      })
+        .then(() => {
+          alert('save success');
+          window.location.reload();
         })
-        .then(() => cms.api.git.commit({
-          files: [props.fileRelativePath],
-          message: `Commit from Tina: Update ${props.fileRelativePath}`,
-        }))
-        .then(() => window.location.reload())
         // TODO: need to be change into snackbar
         // eslint-disable-next-line no-alert
         .catch((err) => alert(err));
@@ -137,17 +173,36 @@ export default function Page(props: Props) {
     },
   });
 
+
+  // add a form to the CMS; store form data in `post`
   useWatchFormValues(form, () => {
   });
 
-  let hero;
-  if (newPost.hero) {
-    if (newPost.hero.includes('http')) {
-      hero = newPost.hero;
-    } else {
-      hero = `/${newPost.hero}`;
-    }
+
+  const [files, setFiles] = useState([]);
+  const [upload, setUpload] = useState(false);
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    // set preview
+    // upload file
+    setFiles([]);
+    setUpload(true);
+    const imageUrl = await uploadFile(acceptedFiles);
+    setUpload(false);
+    setFiles(acceptedFiles.map((file) => Object.assign(file, {
+      preview: imageUrl,
+    })));
+  }, []);
+
+  if (files.length > 0) {
+    form.finalForm.change('banner', files[0].preview);
   }
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useDropzone({ onDrop });
 
   return (
     <Layout
@@ -155,6 +210,22 @@ export default function Page(props: Props) {
       black={scrollY >= window.innerHeight * 0.55}
     >
       <div className="header">
+        { newPost.unlockContent
+          && <div className="file-uploader container" {...getRootProps()}>
+            <input {...getInputProps()} />
+            <div className="uploader-desc">
+              {
+                isDragActive
+                  ? <p>Drop the files here ...</p>
+                  // eslint-disable-next-line react/no-unescaped-entities
+                  : <p>Drag 'n' drop some files here, or click to select files</p>
+              }
+            </div>
+            <div className="loader-container">
+              <ScaleLoader color="#3273dc" loading={upload}/>
+            </div>
+          </div>
+        }
         <div className="container">
           <span className="">
             <a href="/">back to home</a>
@@ -182,28 +253,29 @@ export default function Page(props: Props) {
         }
 
       </div>
+      <div className="separator"></div>
       <div className="container post-navigator">
         <div className="prev">
-          {post.data.prev && (
+          {post.prev && (
             <div>
               <div>
-                <Link href={`/story/${post.data.prev}`}>
+                <Link href={`/story/${post.prev.slug}`}>
                   <a>Prev</a>
                 </Link>
               </div>
-              <span>{post.data.prevTitle}</span>
+              <span>{post.prev.title}</span>
             </div>
           )}
         </div>
         <div className="next">
-          {post.data.next && (
+          {post.next && (
             <div>
               <div>
-                <Link href={`/story/${post.data.next}`}>
+                <Link href={`/story/${post.next.slug}`}>
                   <a>Next</a>
                 </Link>
               </div>
-              <span>{post.data.nextTitle}</span>
+              <span>{post.next.title}</span>
             </div>
           )}
         </div>
@@ -221,7 +293,7 @@ export default function Page(props: Props) {
                             rgba(245, 246, 252, 0),
                             rgba(255, 255, 255, 1)
                         ),
-                        url(${hero || post.data.hero});
+                        url(${files[0] ? files[0].preview : newPost.banner});
                     background-size: cover;
                     display: flex;
                     align-items: flex-end;
@@ -252,8 +324,25 @@ export default function Page(props: Props) {
 
                 .post-navigator {
                     display: flex;
-                    padding: 50px 10vw;
+                    padding: 30px 10vw;
                     justify-content: space-between;
+                }
+
+                .separator {
+                  content: "";
+                  height: 300px;
+                  width: 100vw;
+                  background-size: cover;
+                  background-position: center;
+                  background-image: linear-gradient(
+                          to left,
+                          rgba(255, 255, 255, 1),
+                          rgba(245, 246, 252, 0),
+                          rgba(245, 246, 252, 0),
+                          rgba(245, 246, 252, 0),
+                          rgba(255, 255, 255, 1)
+                      ),
+                      url(${files[0] ? files[0].preview : newPost.banner});
                 }
 
                 .post-navigator span {
@@ -268,23 +357,54 @@ export default function Page(props: Props) {
                 .prev {
                     text-align: left;
                 }
+
+                .file-uploader {
+                  position: absolute;
+                  top: 0;
+                  font-size: 30px;
+                  height: inherit;
+                  width: inherit;
+                  margin: auto;
+                  border: solid 1px red;
+                  padding: inherit;
+                  left: 10vw;
+                  right: 10vw;
+               }
+
+                .uploader-desc {
+                  color: white;
+                  background: black;
+                  text-align: center;
+                  margin-top: 20%;
+                }
+
+                .loader-container {
+                  display: flex;
+                  justify-content: center;
+                  margin-top: 50px;
+                } 
             `}</style>
     </Layout>
   );
 }
 
-Page.getInitialProps = (ctx) => {
+Page.getInitialProps = async (ctx) => {
   const { slug } = ctx.query;
-  // $FlowFixMe
-  const content = require(`../../../posts/${slug}.md`); // eslint-disable-line import/no-dynamic-require, global-require
-  const data = matter(content.default);
+  const { apolloClient } = ctx;
 
   const cookie = nookies.get(ctx, 'cookie');
 
+  const { data } = await apolloClient.query({
+    query: POST_DETAIL,
+    variables: {
+      slug,
+    },
+    fetchPolicy: 'network-only',
+  });
+
   return {
     slug,
-    post: data,
-    fileRelativePath: `/posts/${slug}.md`,
+    post: data.post,
     token: cookie.ego_token,
     username: cookie.ego_username,
   };

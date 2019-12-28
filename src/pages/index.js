@@ -1,19 +1,20 @@
 // @flow
 import React from 'react';
-import matter from 'gray-matter';
 
-import { useCMS, useLocalForm, useWatchFormValues } from 'tinacms';
+import { useLocalForm, useWatchFormValues } from 'tinacms';
 import { useRouter } from 'next/router';
 
+import { gql } from 'apollo-boost';
 import nookies from 'nookies';
+
 import Layout from '../components/layout';
 import BlogList from '../components/blogList';
 
-import datePrefix from '../utils/datePrefix';
-import generateMarkdown from '../utils/generateMarkdown';
 import About from '../components/about';
 
 import type { Post } from '../types/post.type';
+
+import MutationClient from '../utils/apolloMutationClient';
 
 const metadata = require('../site.config').default;
 
@@ -26,7 +27,6 @@ type Props = {
 };
 
 const Index = (props: Props) => {
-  const cms = useCMS();
   const router = useRouter();
   const [, form] = useLocalForm({
     id: 'add-post',
@@ -57,50 +57,26 @@ const Index = (props: Props) => {
 
     // save & commit the file when the "save" button is pressed
     onSubmit(data) {
-      const slug = datePrefix(data.slug);
-      const filepath = `/posts/${slug}.md`;
-      const lastPost = props.posts[props.posts.length - 1];
-      const prev = props.posts.length > 0
-        ? {
-          prev: lastPost.slug,
-          prevTitle: lastPost.document.data.title,
-        }
-        : {};
-      return cms.api.git
-        .writeToDisk({
-          fileRelativePath: filepath,
-          content: generateMarkdown(
-            {
-              title: data.title,
-              hero: '',
-              ...prev,
-            },
-            data.content,
-          ),
-        })
-        .then(() => {
-          if (props.posts.length < 1) {
-            return;
-          }
-
-          cms.api.git.writeToDisk({
-            fileRelativePath: `posts/${lastPost.slug}.md`,
-            content: generateMarkdown(
-              {
-                ...lastPost.document.data,
-                next: slug,
-                nextTitle: data.title,
-              },
-              lastPost.document.content,
-            ),
-          });
-        })
-        .then(() => cms.api.git.commit({
-          files: [filepath],
-          message: `New file from Tina: Update ${filepath}`,
-        }))
-        .then(() => {
-          router.push(`/story/${slug}`);
+      MutationClient(props.token ?? '').mutate({
+        mutation: gql`
+              mutation CreatePost($title: String!, $slug: String) {
+                post: CreatePost(createPostInput:{
+                  title: $title
+                  slug: $slug
+                  content: ""
+                  isDraft: true
+                }) {
+                  slug
+                }
+              }
+            `,
+        variables: {
+          title: data.title,
+          slug: data.slug,
+        },
+      })
+        .then((res) => {
+          router.push(`/story/${res.data.post.slug}`);
         })
         // eslint-disable-next-line no-alert
         .catch((err) => alert(err));
@@ -163,32 +139,10 @@ const Index = (props: Props) => {
 };
 
 Index.getInitialProps = async (ctx) => {
-  // get posts & context from folder
-  const posts = ((context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    const data = keys.map((key, index) => {
-      // Create slug from filename
-      const slug = key
-        .replace(/^.*[\\/]/, '')
-        .split('.')
-        .slice(0, -1)
-        .join('.');
-      const value = values[index];
-      const document = matter(value.default);
-      return {
-        document,
-        slug,
-      };
-    });
-    return data;
-    // $FlowFixMe https://github.com/zeit/next.js/issues/4614
-  })(require.context('../../posts', true, /\.md$/));
-
   const cookie = nookies.get(ctx, 'cookie');
 
   return {
-    posts: posts.reverse(),
+    posts: [],
     token: cookie.ego_token,
     username: cookie.ego_username,
   };

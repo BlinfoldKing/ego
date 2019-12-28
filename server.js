@@ -36,7 +36,7 @@ app.prepare().then(() => {
   server.post('/image-upload', (req, res) => {
     const values = Object.values(req.files);
     const promises = values.map((image) => cloudinary.uploader
-      .upload(image.path, { quality: 50 }));
+      .upload(image.path, { quality: 25 }));
 
     Promise
       .all(promises)
