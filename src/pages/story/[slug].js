@@ -8,7 +8,7 @@ import axios from 'axios';
 import { mdToDraftjs, draftjsToMd } from 'draftjs-md-converter';
 import { ScaleLoader } from 'react-spinners';
 
-import nookies from 'nookies';
+import cookies from 'next-cookies';
 
 import Link from 'next/link';
 import Layout from '../../components/layout';
@@ -403,7 +403,7 @@ Page.getInitialProps = async (ctx) => {
   const { slug } = ctx.query;
   const { apolloClient } = ctx;
 
-  const cookie = nookies.get(ctx, 'cookie');
+  const cookie = cookies(ctx);
 
   const { data } = await apolloClient.query({
     query: POST_DETAIL,

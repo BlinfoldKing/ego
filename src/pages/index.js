@@ -5,7 +5,7 @@ import { useLocalForm, useWatchFormValues } from 'tinacms';
 import { useRouter } from 'next/router';
 
 import { gql } from 'apollo-boost';
-import nookies from 'nookies';
+import cookies from 'next-cookies';
 
 import Layout from '../components/layout';
 import BlogList from '../components/blogList';
@@ -141,12 +141,12 @@ const Index = (props: Props) => {
 };
 
 Index.getInitialProps = async (ctx) => {
-  const cookie = nookies.get(ctx);
+  const { ego_token: token, ego_username: username } = cookies(ctx);
 
   return {
     posts: [],
-    token: cookie.ego_token,
-    username: cookie.ego_username,
+    token,
+    username,
   };
 };
 

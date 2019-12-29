@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import nookies from 'nookies';
+import cookies from 'next-cookies';
 import Link from 'next/link';
 import Router from 'next/router';
 
@@ -49,7 +49,7 @@ export default class Register extends React.Component<Props, State> {
 
 
   static getInitialProps = async (ctx: any) => {
-    const cookie = nookies.get(ctx, 'cookie');
+    const cookie = cookies(ctx);
 
     return {
       token: cookie.ego_token,

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import Link from 'next/link';
-import nookies from 'nookies';
+import Cookies from 'next-cookies';
 import { ClipLoader } from 'react-spinners';
-import Cookies from 'js-cookie';
+import cookies from 'js-cookie';
 
 import Layout from '../components/layout';
 import metadata from '../site.config';
@@ -35,7 +35,7 @@ export default class Login extends React.Component<Props, State> {
 
 
   static getInitialProps = async (ctx: any) => {
-    const cookie = nookies.get(ctx, 'cookie');
+    const cookie = cookies(ctx);
     return {
       token: cookie.ego_token,
       username: cookie.ego_username,

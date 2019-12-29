@@ -6,7 +6,6 @@ import '../styles/styles.scss';
 
 import Link from 'next/link';
 
-
 import { parseCookies } from 'nookies';
 
 import metadata from '../site.config';
