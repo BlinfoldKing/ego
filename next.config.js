@@ -4,7 +4,7 @@ const withFonts = require('next-fonts');
 const webpack = require('webpack');
 
 module.exports = {
-  target: 'serverless',
+  target: 'server',
   ...withFonts(
     withCSS(
       withSass({
