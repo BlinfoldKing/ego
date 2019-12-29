@@ -8,6 +8,8 @@
   },
   
   "build": {
-    "API_URL": "@api-url"
+    "env": {
+      "API_URL": "@api-url"
+    }
   }
 }
