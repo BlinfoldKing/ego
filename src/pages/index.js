@@ -141,7 +141,7 @@ const Index = (props: Props) => {
 };
 
 Index.getInitialProps = async (ctx) => {
-  const cookie = nookies.get(ctx, 'cookie');
+  const cookie = nookies.get(ctx);
 
   return {
     posts: [],

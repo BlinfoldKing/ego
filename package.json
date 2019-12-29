@@ -67,7 +67,7 @@
     "dev": "node server.js",
     "lint": "npx eslint . --fix ",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node server.js",
     "deploy": "docker-compose up --build"
   },
   "husky": {
