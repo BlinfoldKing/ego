@@ -12,6 +12,7 @@
 ## Install
 
 ```sh
+npm i -g meta
 yarn install
 ```
 
