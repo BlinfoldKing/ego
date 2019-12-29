@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import nookies from 'nookies';
 import { ClipLoader } from 'react-spinners';
+import Cookies from 'js-cookie';
 
 import Layout from '../components/layout';
 import metadata from '../site.config';
@@ -91,8 +92,8 @@ export default class Login extends React.Component<Props, State> {
                     })
                       .then((res) => {
                         this.setState({ token: res.token });
-                        document.cookie = `ego_token=${res.token}; path=/`;
-                        document.cookie = `ego_username=${res.username}; path=/`;
+                        Cookies.set('ego_token', res.token, { expires: 1 });
+                        Cookies.set('ego_username', res.username, { expires: 1 });
                         window.location.reload();
                       }).catch((err) => err);
                   }}>
