@@ -97,7 +97,7 @@ const BlogList = () => {
       {data.posts.map<any>(renderPost)}
     </div>;
   }
-  return <div>
+  return <div id="post-list">
     <div className="field omnisearch">
       <p className="control has-icons-left">
         <input className="input is-rounded" type="text" placeholder="Search Post"
