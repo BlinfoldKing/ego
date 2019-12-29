@@ -22,7 +22,7 @@
 		}
 	}
 
-	span {
+	span:not(.icon) {
 		display: block;
 	}
 	.title {
