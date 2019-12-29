@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import Link from 'next/link';
-import Cookies from 'next-cookies';
 import { ClipLoader } from 'react-spinners';
-import cookies from 'js-cookie';
+import Cookies from 'js-cookie';
+import cookies from 'next-cookies';
 
 import Layout from '../components/layout';
 import metadata from '../site.config';
