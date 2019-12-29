@@ -25,7 +25,7 @@ import {
 import createAutoListPlugin from 'draft-js-autolist-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
-import createMarkdownPlugin from 'draft-js-markdown-plugin';
+// import createMarkdownPlugin from 'draft-js-markdown-plugin';
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
 
 import axios from 'axios';
@@ -60,11 +60,11 @@ type State = {
     uploading: boolean
 };
 
-const languages = {
-  auto: 'automatic',
-};
+// const languages = {
+//   auto: 'automatic',
+// };
 
-const markdownPlugin = createMarkdownPlugin({ languages });
+// const markdownPlugin = createMarkdownPlugin({ languages });
 const sideToolbarPlugin = createSideToolbarPlugin();
 const autoListPlugin = createAutoListPlugin();
 const imagePlugin = createImagePlugin();
@@ -76,7 +76,7 @@ const plugins = [
   autoListPlugin,
   sideToolbarPlugin,
   imagePlugin,
-  markdownPlugin,
+  // markdownPlugin,
   inlineToolbarPlugin,
 ];
 
@@ -168,7 +168,7 @@ export default class TextEditor extends React.Component<Props, State> {
                         axios.request({
                           method: 'post',
                           // $FlowFixMe
-                          url: `${process.env.baseUrl}/image-upload`,
+                          url: `${window.location.origin}/image-upload`,
                           headers: { 'Content-Type': 'multipart/form-data' },
                           data: formData,
                         }).then((res) => {

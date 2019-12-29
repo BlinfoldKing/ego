@@ -65,7 +65,7 @@ const uploadFile = async (files: any) => {
   const ret = await axios.request({
     method: 'post',
     // $FlowFixMe
-    url: `${process.env.baseUrl}/image-upload`,
+    url: `${window.location.origin}/image-upload`,
     headers: { 'Content-Type': 'multipart/form-data' },
     data: formData,
   }).then((res) => {
