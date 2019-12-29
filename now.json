@@ -1,5 +1,9 @@
 {
 	"env": {
-		"NOW_GITHUB_COMMIT_REF": "master"
+    "NOW_GITHUB_COMMIT_REF": "master",
+    "CLOUDINARY_API_KEY": "@cloudniary_api_key",
+    "CLOUDINARY_API_SECRET": "@cloudinary_api_secret",
+    "CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name",
+    "API_URL": "@api_url"
 	}
 }
