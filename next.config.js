@@ -37,7 +37,7 @@ module.exports = {
 
   env: {
     dev: process.env.NODE_ENV !== 'production',
-    apiUrl: process.env.API_URL || 'http://localhost:9000',
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    apiUrl: process.env.API_URL,
+    baseUrl: process.env.BASE_URL,
   },
 };
