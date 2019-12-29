@@ -13,8 +13,8 @@ import './blogList.scss';
 import type { Node } from 'react';
 
 const POST_LIST = gql`
-  query GetAllPosts($limit: Int!, $offset: Int!) {
-    posts: GetAllPosts(limit: $limit, offset: $offset) {
+  query GetAllPosts($query: String!, $limit: Int!, $offset: Int!) {
+    posts: SearchPostByTitle(query: $query, limit: $limit, offset: $offset) {
       title
       slug
       banner
@@ -39,6 +39,7 @@ background-size: cover;
 
 const BlogList = () => {
   const [selectedPost, setPost] = useState('');
+  const [query, setQuery] = useState('');
   const [pagination, setPage] = useState({
     limit: 10,
     offset: 0,
@@ -51,6 +52,7 @@ const BlogList = () => {
     variables: {
       limit: pagination.limit,
       offset: pagination.offset,
+      query,
     },
   });
 
@@ -88,11 +90,41 @@ const BlogList = () => {
     </div>
 
   );
-  if (!loading && !error) {
-    return <div>
+
+  let content = <div></div>;
+  if (!loading && !error && data.posts.length > 0) {
+    content = <div>
       {data.posts.map<any>(renderPost)}
-      <div className="load-more">
-        <a href="#footer">
+    </div>;
+  }
+  return <div>
+    <div className="field omnisearch">
+      <p className="control has-icons-left">
+        <input className="input is-rounded" type="text" placeholder="Search Post"
+          onChange={((e) => {
+            setQuery(e.target.value);
+            fetchMore({
+              variables: {
+                offset: pagination.offset,
+                query,
+              },
+              updateQuery: (prev, { fetchMoreResult }) => ({
+                ...prev,
+                posts: [...fetchMoreResult.posts],
+              }),
+            });
+          })
+          }
+        />
+        <span className="icon is-small is-left">
+          <i className="fas fa-search"></i>
+        </span>
+      </p>
+    </div>
+    <div style={{ minHeight: 300 }}>
+      {content}
+      { !loading && !error && data.posts.length > 0
+        ? <a href="#footer">
           <span
             onClick={() => {
               setPage({
@@ -103,6 +135,7 @@ const BlogList = () => {
               fetchMore({
                 variables: {
                   offset: pagination.offset,
+                  query,
                 },
                 updateQuery: (prev, { fetchMoreResult }) => ({
                   ...prev,
@@ -110,18 +143,23 @@ const BlogList = () => {
                 }),
               });
             }}
-            className="title is-2 is-active load-more-button">
+            className="title is-2 is-active">
             <i>Load More</i>
           </span>
         </a>
-        <div className="foot-note" id="footer">
-              made with 🔥 by <a href="https://github.com/blinfoldking">blinfoldking</a>
-        </div>
-      </div>
-    </div>;
-  }
-  return <div>
-    {/* skeleton component */}
+        : (!loading && <div>
+          <h1 className="title is-1"> No Post Found :( </h1>
+          <div>
+            <div>
+              <Link href="#">
+                <a href="#">Try Again</a>
+              </Link>
+            </div>
+          </div>
+        </div>)
+      }
+
+    </div>
   </div>;
 };
 

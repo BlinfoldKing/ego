@@ -104,6 +104,11 @@ export default class Layout extends React.Component<Props> {
           </nav>
         </header>
         {children}
+        <footer>
+          <div className="foot-note" id="footer">
+            made with 🔥 by <a href="https://github.com/blinfoldking">blinfoldking</a>
+          </div>
+        </footer>
         <style jsx>
           {`
             .navbar-item {
@@ -114,6 +119,7 @@ export default class Layout extends React.Component<Props> {
             }
          `}
         </style>
+
       </div>
     );
   }

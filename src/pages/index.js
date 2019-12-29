@@ -86,7 +86,7 @@ const Index = (props: Props) => {
   useWatchFormValues(form, () => {});
 
   return (
-    <Layout black={true} transparent={true}>
+    <Layout black={true} transparent={false}>
       <div id="background" className="home">
         <div className="container">
           <div className="profile">
@@ -101,10 +101,18 @@ const Index = (props: Props) => {
                 <div className="title is-2 spacer">&nbsp;</div>
                 <div className="title is-2 spacer">&nbsp;</div>
                 <BlogList posts={props.posts} />
+                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 spacer">&nbsp;</div>
               </div>
             ) : (
               <About />
             )}
+
+
           </div>
         </div>
       </div>
