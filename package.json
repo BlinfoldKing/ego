@@ -60,7 +60,8 @@
     "url-loader": "^3.0.0",
     "uuid": "^3.3.3",
     "victormono": "^1.2.9",
-    "webpack": "^4.41.4"
+    "webpack": "^4.41.4",
+    "cross-env": "^6.0.3"
   },
   "scripts": {
     "dev": "node server.js",
@@ -78,7 +79,6 @@
     "@babel/plugin-transform-flow-strip-types": "^7.7.4",
     "@babel/preset-flow": "^7.7.4",
     "babel-eslint": "^10.0.3",
-    "cross-env": "^6.0.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-flowtype": "^4.5.2",
