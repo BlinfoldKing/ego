@@ -1,7 +1,6 @@
 // @flow
 import ReactMarkdown from 'react-markdown';
 import React, { useState, useEffect, useCallback } from 'react';
-import Script from 'react-inline-script';
 import { useLocalForm, useWatchFormValues } from 'tinacms';
 import { useDropzone } from 'react-dropzone';
 import { gql, ApolloClient } from 'apollo-boost';
@@ -282,31 +281,6 @@ export default function Page(props: Props) {
           )}
         </div>
       </div>
-
-      <div>
-        <div id="disqus_thread" className="container"></div>
-      </div>
-      <Script>
-        {`
-            /**
-            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-            var disqus_config = function () {
-              this.page.url = 'https://www.blinfoldking.dev/story/${post.slug}';  // Replace PAGE_URL with your page's canonical URL variable
-              this.page.identifier = '${post.slug}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-            };
-
-            (function() { // DON'T EDIT BELOW THIS LINE
-              var d = document, s = d.createElement('script');
-              s.src = 'https://blinfoldking.disqus.com/embed.js';
-              s.setAttribute('data-timestamp', +new Date());
-              (d.head || d.body).appendChild(s);
-            })();
-        `}
-      </Script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
       <div className="top">
         <a href="#">
           <i data-eva="arrowhead-up" />
