@@ -14,6 +14,10 @@ import {
 } from 'draft-js';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import {
+  BoldButton,
+  ItalicButton,
+  UnderlineButton,
+  CodeButton,
   HeadlineTwoButton,
   HeadlineThreeButton,
   BlockquoteButton,
@@ -25,17 +29,19 @@ import {
 import createAutoListPlugin from 'draft-js-autolist-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createImagePlugin from 'draft-js-image-plugin';
-import createMarkdownPlugin from 'draft-js-markdown-plugin';
 import createInlineToolbarPlugin from 'draft-js-inline-toolbar-plugin';
+import createCodeEditorPlugin from 'draft-js-code-editor-plugin';
+import createLinkifyPlugin from 'draft-js-linkify-plugin';
+import createLinkPlugin from 'draft-js-anchor-plugin';
 
 import axios from 'axios';
+
+import './editor.scss';
 
 import 'draft-js-side-toolbar-plugin/lib/plugin.css';
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
-
-import './editor.scss';
-
+import 'draft-js-anchor-plugin/lib/plugin.css';
 
 type Field = {
     name: string,
@@ -60,24 +66,32 @@ type State = {
     uploading: boolean
 };
 
-const languages = {
-  auto: 'automatic',
-};
-
-const markdownPlugin = createMarkdownPlugin({ languages });
+const codeEditorPlugin = createCodeEditorPlugin();
 const sideToolbarPlugin = createSideToolbarPlugin();
 const autoListPlugin = createAutoListPlugin();
 const imagePlugin = createImagePlugin();
-const inlineToolbarPlugin = createInlineToolbarPlugin();
+const linkifyPlugin = createLinkifyPlugin();
+const linkPlugin = createLinkPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin({
+  structure: [
+    BoldButton,
+    ItalicButton,
+    UnderlineButton,
+    CodeButton,
+    linkPlugin.LinkButton,
+  ],
+});
 
 const { addImage } = imagePlugin;
 
 const plugins = [
+  codeEditorPlugin,
   autoListPlugin,
   sideToolbarPlugin,
   imagePlugin,
-  markdownPlugin,
   inlineToolbarPlugin,
+  linkifyPlugin,
+  linkPlugin,
 ];
 
 const { InlineToolbar } = inlineToolbarPlugin;
@@ -257,7 +271,20 @@ export default class TextEditor extends React.Component<Props, State> {
               onFocus={() => this.onFocus()}
               placeholder="Enter Your Text Below"
             />
-            <InlineToolbar />
+            <InlineToolbar >
+              {
+                // may be use React.Fragment instead of div to improve perfomance after React 16
+                (externalProps) => (
+                  <div>
+                    <BoldButton {...externalProps} />
+                    <ItalicButton {...externalProps} />
+                    <UnderlineButton {...externalProps} />
+                    <CodeButton {...externalProps} />
+                    <linkPlugin.LinkButton {...externalProps} />
+                  </div>
+                )
+              }
+            </InlineToolbar>
             <SideToolbar>
               {(externalProps) => (
                 <div>

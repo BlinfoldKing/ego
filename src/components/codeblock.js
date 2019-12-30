@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { duotoneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { duotoneSpace as theme } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 type Props = {
   language?: string,
@@ -19,21 +19,41 @@ const languages = [
   'lisp',
   'go',
   'ruby',
+  'rust',
 ];
+
+const extension = {
+  js: 'javascript',
+  rs: 'rust',
+  ex: 'elixir',
+  rb: 'ruby',
+  jsx: 'jsx',
+  go: 'go',
+  cpp: 'c++',
+  hs: 'haskell',
+  lisp: 'lisp',
+};
 
 class CodeBlock extends PureComponent<Props> {
   render() {
     const { value } = this.props;
     let language;
     if (value.split('\n').length > 0) {
-      const firstLine = value.split('\n')[0].split(' ');
-      language = languages.includes(firstLine[firstLine.length - 1])
-        ? firstLine[firstLine.length - 1]
+      const firstLine = value.split('\n')[0].trim().split(' ');
+      const arg = firstLine[firstLine.length - 1];
+      language = languages.includes(arg)
+        ? arg
         : '';
+
+      if (language === '') {
+        const filename = arg.split('.');
+        const ext = filename[filename.length - 1];
+        language = Object.keys(extension).includes(ext) ? extension[ext] : '';
+      }
     }
     return (
       <div>
-        <SyntaxHighlighter language={language} style={{ ...duotoneDark, fontSize: 20 }}>
+        <SyntaxHighlighter language={language} style={{ ...theme, fontSize: 20 }}>
           {value}
         </SyntaxHighlighter>
         <style jsx> {`
