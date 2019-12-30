@@ -16,7 +16,7 @@ import Layout from '../../components/layout';
 import type { Document } from '../../types/document.type';
 
 import Editor from '../../components/editor';
-// import CodeBlock from '../../components/codeblock';
+import CodeBlock from '../../components/codeblock';
 
 import MutationClient from '../../utils/apolloMutationClient';
 
@@ -241,7 +241,7 @@ export default function Page(props: Props) {
         {!newPost.unlockContent
           ? <ReactMarkdown
             className="post"
-            // renderers={{ code: CodeBlock }}
+            renderers={{ code: CodeBlock }}
             source={
               post.content
             } />

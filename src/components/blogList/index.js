@@ -82,7 +82,9 @@ const BlogList = () => {
       </a>
       {/* </Link> */}
       <p className={ `preview ${selectedPost === post.slug ? '' : 'hide'}` }>
-        <ReactMarkdown source={post.preview} />
+        <div className="preview-content">
+          <ReactMarkdown source={post.preview} />
+        </div>
         <div>
           <Link href={`/story/${post.slug}`}>Read More</Link>
         </div>
