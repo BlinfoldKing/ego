@@ -13,6 +13,8 @@ const handle = app.getRequestHandler();
 const cloudinary = require('cloudinary');
 const formData = require('express-form-data');
 
+const compression = require('compression');
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -23,6 +25,7 @@ app.prepare().then(() => {
   const server = express();
 
   server.use(cors());
+  server.use(compression());
   server.use(formData.parse());
   server.use(
     '/___tina',
