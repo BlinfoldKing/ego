@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
-import ReactDOM from 'react-dom';
 
 import { BarLoader } from 'react-spinners';
 
