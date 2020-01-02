@@ -12,6 +12,9 @@ import './blogList.scss';
 
 import type { Node } from 'react';
 
+const PAGINATION_LIMIT = 10;
+const WAIT_INTERVAL = 900;
+
 const POST_LIST = gql`
   query GetAllPosts($query: String!, $limit: Int!, $offset: Int!) {
     posts: SearchPostByTitle(query: $query, limit: $limit, offset: $offset) {
@@ -40,18 +43,16 @@ background-size: cover;
 const BlogList = () => {
   const [selectedPost, setPost] = useState('');
   const [query, setQuery] = useState('');
-  const [pagination, setPage] = useState({
-    limit: 10,
-    offset: 0,
-  });
+  const [isLastPage, setPage] = useState(false);
+  const [timer, updateTimer] = useState(undefined);
 
   const {
     loading, error, data, fetchMore,
   } = useQuery(POST_LIST, {
     fetchPolicy: 'network-only',
     variables: {
-      limit: pagination.limit,
-      offset: pagination.offset,
+      limit: PAGINATION_LIMIT,
+      offset: 0,
       query,
     },
   });
@@ -90,33 +91,42 @@ const BlogList = () => {
         </div>
       </p>
     </div>
-
   );
 
-  let content = <div></div>;
-  if (!loading && !error && data.posts.length > 0) {
-    content = <div>
-      {data.posts.map<any>(renderPost)}
-    </div>;
-  }
+  const handleSearch = () => {
+    setPage(false);
+
+    // if (timer) {
+    //   clearTimeout(timer);
+    // }
+
+    if (timer) {
+      updateTimer(
+        setTimeout(() => {
+          fetchMore({
+            variables: {
+              offset: data.posts.length || 0,
+              query,
+            },
+            updateQuery: (prev, { fetchMoreResult }) => ({
+              ...prev,
+              posts: [...fetchMoreResult.posts],
+            }),
+          });
+        }, WAIT_INTERVAL),
+      );
+    }
+  };
+
+
   return <div id="post-list">
     <div className="field omnisearch">
       <p className="control has-icons-left">
         <input className="input is-rounded" type="text" placeholder="Search Post"
-          onChange={((e) => {
+          onChange={(e) => {
             setQuery(e.target.value);
-            fetchMore({
-              variables: {
-                offset: pagination.offset,
-                query,
-              },
-              updateQuery: (prev, { fetchMoreResult }) => ({
-                ...prev,
-                posts: [...fetchMoreResult.posts],
-              }),
-            });
-          })
-          }
+            handleSearch();
+          }}
         />
         <span className="icon is-small is-left">
           <i className="fas fa-search"></i>
@@ -124,43 +134,49 @@ const BlogList = () => {
       </p>
     </div>
     <div style={{ minHeight: 300 }}>
-      {content}
-      { !loading && !error && data.posts.length > 0
-        ? <a href="#footer">
+      {!loading && !error
+        && <div>
+          {data.posts.map<any>(renderPost)}
+        </div>
+      }
+      { !isLastPage && (!loading && !error && data.posts.length > 0
+        ? <a href="#">
           <span
             onClick={() => {
-              setPage({
-                limit: pagination.limit,
-                offset: (pagination.limit * (pagination.offset + 1)) + 1,
-              });
-
               fetchMore({
                 variables: {
-                  offset: pagination.offset,
+                  offset: data.posts.length,
+                  limit: PAGINATION_LIMIT,
                   query,
                 },
-                updateQuery: (prev, { fetchMoreResult }) => ({
-                  ...prev,
-                  posts: [...fetchMoreResult.posts, ...prev.posts],
-                }),
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (fetchMoreResult.posts.length > 0) {
+                    return {
+                      ...prev,
+                      posts: [...prev.posts, ...fetchMoreResult.posts],
+                    };
+                  }
+
+                  setPage(true);
+                  return prev;
+                },
               });
             }}
-            className="title is-2 is-active">
-            <i>Load More</i>
+            className="title is-2 end is-active load-more-button has-text-link">
+            <i className="fas fa-angle-double-down"></i>
+            &nbsp;Load More
           </span>
         </a>
-        : (!loading && <div>
+        : (!loading && data.posts.length === 0 && <div>
           <h1 className="title is-1"> No Post Found :( </h1>
           <div>
             <div>
-              <Link href="#">
-                <a href="#">Try Again</a>
-              </Link>
+              <a href="#" onClick={() => handleSearch()}>Try Again</a>
             </div>
           </div>
-        </div>)
+        </div>))
       }
-
+      { isLastPage && <div className="end">end of posts</div>}
     </div>
   </div>;
 };

@@ -25,7 +25,12 @@
 	span:not(.icon) {
 		display: block;
 	}
-	.title {
+
+	.load-more-button {
+		
+	}
+
+	.title:not(.load-more-button) {
 		// color: #999;
 		font-size: 3.5rem;
 		margin-bottom: 0;
@@ -54,5 +59,13 @@
 	.preview-content {
 		max-height: 200px;
 		overflow: hidden;
+	}
+
+	.end {
+		border-top: dashed 1px #999;
+		padding: 5px;
+		margin-top: 10px;
+		width: 300px;
+		font-size: 1.5rem;
 	}
 }

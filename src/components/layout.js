@@ -56,11 +56,9 @@ export default class Layout extends React.Component<Props> {
             }}
           >
             <div className="navbar-brand">
-              <Link href="/">
-                <a className="navbar-item">
-                  <h1 id="logo">EGO</h1><span className="version">{metadata.version}</span>
-                </a>
-              </Link>
+              <a href="/" className="navbar-item">
+                <h1 id="logo">EGO</h1><span className="version">{metadata.version}</span>
+              </a>
               {/* <Link>
                   <a
                     id="burger"
