@@ -353,7 +353,7 @@ export default function Page(props: Props) {
                           rgba(245, 246, 252, 0),
                           rgba(255, 255, 255, 1)
                       ),
-                      url(${files[0] ? files[0].preview : newPost.banner});
+                      url(${`https://res.cloudinary.com/dnm7mbocc/image/fetch/${files[0] ? files[0].preview : newPost.banner}`});
                 }
 
                 .post-navigator span {

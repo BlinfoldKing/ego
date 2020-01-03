@@ -12,7 +12,7 @@ import './blogList.scss';
 
 import type { Node } from 'react';
 
-const PAGINATION_LIMIT = 10;
+const PAGINATION_LIMIT = 3;
 const WAIT_INTERVAL = 900;
 
 const POST_LIST = gql`
@@ -35,7 +35,7 @@ rgba(245, 246, 252, 0),
 rgba(255, 255, 255, 0.50), 
 rgba(255, 255, 255, 1), 
 rgba(255, 255, 255, 1)),
-url(${post.banner});
+url(https://res.cloudinary.com/dnm7mbocc/image/fetch/${post.banner});
 background-size: cover;
 `;
 
