@@ -109,27 +109,45 @@ h1.title.is-1 {
 	}
 
 	h1 {
-		@extend .is-1;
+    @extend .is-1;
+    @media (max-width: $small-device) {
+      font-size: 30px;
+    }
 	}
 
 	h2 {
-		@extend .is-2;
+    @extend .is-2;
+    @media (max-width: $small-device) {
+      font-size: 25px;
+    }
 	}
 
 	h3 {
-		@extend .is-3;
+    @extend .is-3;
+    @media (max-width: $small-device) {
+      font-size: 20px;
+    }
 	}
 
 	h4 {
-		@extend .is-4;
+    @extend .is-4;
+    @media (max-width: $small-device) {
+      font-size: 15;
+    }
 	}
 
 	h5 {
-		@extend .is-5;
+    @extend .is-5;
+    @media (max-width: $small-device) {
+      font-size: 14;
+    }
 	}
 
 	h6 {
-		@extend .is-6;
+    @extend .is-6;
+    @media (max-width: $small-device) {
+      font-size: 14;
+    }
 	}
 
 	p,

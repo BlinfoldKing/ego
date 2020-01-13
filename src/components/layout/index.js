@@ -10,6 +10,8 @@ import { parseCookies } from 'nookies';
 
 import metadata from '../../site.config';
 
+import './layout.scss';
+
 type Props = {
   transparent: boolean,
   children: Node,
@@ -55,23 +57,23 @@ export default class Layout extends React.Component<Props> {
               <a href="/" className="navbar-item">
                 <h1 id="logo">EGO</h1><span className="version">{metadata.version}</span>
               </a>
-              <Link>
-                <a
-                  id="burger"
-                  onClick={toggleStyles}
-                  role="button"
-                  className="navbar-burger burger"
-                  aria-label="menu"
-                  aria-expanded="false"
-                  data-target="navbarmenu"
-                >
-                  <span aria-hidden="true" />
-                  <span aria-hidden="true" />
-                  <span aria-hidden="true" />
-                </a>
-              </Link>
+              <a
+                id="burger"
+                onClick={toggleStyles}
+                role="button"
+                className="navbar-burger burger"
+                aria-label="menu"
+                aria-expanded="false"
+                data-target="navbarmenu"
+              >
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+                <span aria-hidden="true" />
+              </a>
             </div>
-            <div id="navbarmenu" className="navbar-menu">
+            <div
+              id="navbarmenu"
+              className="navbar-menu">
               <div className="navbar-start" />
 
               <div className="navbar-end">

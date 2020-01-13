@@ -1,0 +1,9 @@
+@import '../../styles/common.scss';
+
+#navbarmenu {
+	.navbar-item {
+		@media (max-width: $x-large-device) {
+			color: black;
+		}
+	}
+}
