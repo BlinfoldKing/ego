@@ -96,17 +96,9 @@ const Index = (props: Props) => {
           <div>
             {!router.query.about ? (
               <div className="post-list">
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 top-spacer">&nbsp;</div>
                 <BlogList posts={props.posts} />
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
-                <div className="title is-2 spacer">&nbsp;</div>
+                <div className="title is-2 bottom-spacer">&nbsp;</div>
               </div>
             ) : (
               <About />
@@ -118,19 +110,6 @@ const Index = (props: Props) => {
       </div>
       <style jsx>
         {`
-                    .container {
-                        display: flex;
-                        flex-direction: row;
-                        width: 100vw;
-                        padding: 0 100px;
-                        max-width: 100vw;
-                        position: absolute;
-                        top: 50%;
-                        -ms-transform: translateY(-50%);
-                        transform: translateY(-50%);
-                        align-items: center;
-                    }
-
                     #background {
                         height: 100vh;
                     }
