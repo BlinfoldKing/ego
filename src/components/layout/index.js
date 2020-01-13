@@ -2,13 +2,13 @@
 import React from 'react';
 import type { Node } from 'react';
 import Head from 'next/head';
-import '../styles/styles.scss';
+import '../../styles/styles.scss';
 
 import Link from 'next/link';
 
 import { parseCookies } from 'nookies';
 
-import metadata from '../site.config';
+import metadata from '../../site.config';
 
 type Props = {
   transparent: boolean,
@@ -26,12 +26,12 @@ export default class Layout extends React.Component<Props> {
   render() {
     const { transparent, children, black } = this.props;
     // TODO: used later for responsive
-    // const toggleStyles = () => {
-    // const burger = document.querySelector('#burger');
-    // if (burger) burger.classList.toggle('is-active');
-    // const navbar = document.querySelector('#navbarmenu');
-    // if (navbar) navbar.classList.toggle('is-active');
-    // };
+    const toggleStyles = () => {
+      const burger = document.querySelector('#burger');
+      if (burger) burger.classList.toggle('is-active');
+      const navbar = document.querySelector('#navbarmenu');
+      if (navbar) navbar.classList.toggle('is-active');
+    };
 
 
     return (
@@ -50,30 +50,26 @@ export default class Layout extends React.Component<Props> {
             className={`navbar ${transparent ? 'is-transparent' : ''} is-fixed-top`}
             role="navigation"
             aria-label="main navigation"
-            style={{
-              paddingLeft: 100,
-              paddingRight: 100,
-            }}
           >
             <div className="navbar-brand">
               <a href="/" className="navbar-item">
                 <h1 id="logo">EGO</h1><span className="version">{metadata.version}</span>
               </a>
-              {/* <Link>
-                  <a
-                    id="burger"
-                    onClick={toggleStyles}
-                    role="button"
-                    className="navbar-burger burger"
-                    aria-label="menu"
-                    aria-expanded="false"
-                    data-target="navbarmenu"
-                  >
-                    <span aria-hidden="true" />
-                    <span aria-hidden="true" />
-                    <span aria-hidden="true" />
-                  </a>
-                </Link> */}
+              <Link>
+                <a
+                  id="burger"
+                  onClick={toggleStyles}
+                  role="button"
+                  className="navbar-burger burger"
+                  aria-label="menu"
+                  aria-expanded="false"
+                  data-target="navbarmenu"
+                >
+                  <span aria-hidden="true" />
+                  <span aria-hidden="true" />
+                  <span aria-hidden="true" />
+                </a>
+              </Link>
             </div>
             <div id="navbarmenu" className="navbar-menu">
               <div className="navbar-start" />
