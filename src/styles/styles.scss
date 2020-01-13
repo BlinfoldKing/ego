@@ -84,9 +84,15 @@ footer {
 		@extend .is-6;
 	}
 
-	p {
+	p, li {
 		font-size: 24px;
 		text-align: justify;
+	}
+
+	img {
+		min-width: 500px;
+		display: block;
+		margin: auto;
 	}
 }
 
