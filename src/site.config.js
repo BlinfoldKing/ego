@@ -15,7 +15,7 @@ const config = {
       email: 'mailto://ganeshadanu1@gmail.com',
     },
   },
-  version: 'v2.0.0',
+  version: 'v2.1.0',
 };
 
 export default config;
