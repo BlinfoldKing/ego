@@ -19,6 +19,7 @@ import Editor from '../../components/editor';
 import CodeBlock from '../../components/codeblock';
 
 import MutationClient from '../../utils/apolloMutationClient';
+import formatDate from '../../utils/formatDate';
 
 const POST_DETAIL = gql`
 query Post($slug: String!){
@@ -28,6 +29,7 @@ query Post($slug: String!){
     slug
     content
     banner
+    createdAt
     next {
       title
       slug
@@ -119,6 +121,8 @@ export default function Page(props: Props) {
   // grab the instance of the cms to access the registered git API
   const { post } = props;
 
+  // post.createdAt = new Date(post.createdAt);
+  // console.log(post.createdAt);
   const [newPost, form] = useLocalForm({
     id: post.id, // needs to be unique
     label: 'Edit Post',
@@ -228,13 +232,19 @@ export default function Page(props: Props) {
           </div>
         }
         <div className="container">
-          <span className="">
-            <a href="/">back to home</a>
-          </span>
-          <h1
-            className="title is-1"
-            dangerouslySetInnerHTML={{ __html: newPost.title }}
-          />
+          <span> {
+            post.createdAt
+            && <div className="subtitle" >
+              {formatDate(post.createdAt)}
+            </div>
+          }</span>
+          <div className="title-container">
+            <h1
+              className="title is-1"
+              dangerouslySetInnerHTML={{ __html: newPost.title }}
+            />
+
+          </div>
         </div>
       </div>
       <div className="content container">
@@ -294,6 +304,11 @@ export default function Page(props: Props) {
                     background-image: url(${files[0] ? files[0].preview : newPost.banner});
                     display: flex;
                     align-items: flex-end;
+                }
+
+                .subtitle {
+                  color: #999;
+                  font-style: italic;
                 }
 
                 .header-overlay {
