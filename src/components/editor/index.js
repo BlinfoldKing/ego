@@ -261,7 +261,7 @@ export default class TextEditor extends React.Component<Props, State> {
             {this.props.field.label}
           </label>
           <div
-            className="editor"
+            className="editor post"
           >
             <Editor
               plugins={plugins}
