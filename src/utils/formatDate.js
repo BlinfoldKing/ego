@@ -19,6 +19,7 @@ const monthName = [
   'Jul',
   'Aug',
   'Sep',
+  'Oct',
   'Nov',
   'Des',
 ];
