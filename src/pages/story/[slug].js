@@ -21,6 +21,8 @@ import CodeBlock from '../../components/codeblock';
 import MutationClient from '../../utils/apolloMutationClient';
 import formatDate from '../../utils/formatDate';
 
+import './style.scss';
+
 const POST_DETAIL = gql`
 query Post($slug: String!){
   post: FindPostBySlug(slug: $slug) {
@@ -301,119 +303,13 @@ export default function Page(props: Props) {
                     height: 60vh;
                     background-attachment: fixed;
                     background-size: cover;
+                    background-position: center;
                     background-image: url(${files[0] ? files[0].preview : newPost.banner});
                     display: flex;
                     align-items: flex-end;
                 }
 
-                .subtitle {
-                  color: #999;
-                  font-style: italic;
-                }
-
-                .header-overlay {
-                  content: "";
-                  width: 100vw;
-                  height: inherit;
-                  position: absolute;
-                  background-image: linear-gradient(
-                          to bottom,
-                          rgba(0, 0, 0, 0),
-                          rgba(255, 255, 255, 1)
-                      );
-                }
-
-                .header a {
-                    font-size: 20px;
-                }
-
-                h1.title.is-1 {
-                    font-size: 60px;
-                }
-
-                .header .container {
-                    padding: 0 10vw;
-                }
-
-                .content {
-                    padding: 50px 10vw;
-                }
-
-                .top {
-                    position: fixed;
-                    right: 10vw;
-                    bottom: 100px;
-                    padding: 10px;
-                }
-
-                .post-navigator {
-                    display: flex;
-                    padding: 30px 10vw;
-                   /* border-top: dashed 1px black; */
-                    justify-content: space-between;
-                }
-
-                .separator {
-                  content: "";
-                  height: 300px;
-                  width: 100vw;
-                  background-size: cover;
-                  background-position: center;
-                  background-attachment: fixed;
-                  background-image: linear-gradient(
-                          to left,
-                          rgba(255, 255, 255, 1),
-                          rgba(245, 246, 252, 0),
-                          rgba(245, 246, 252, 0),
-                          rgba(245, 246, 252, 0),
-                          rgba(255, 255, 255, 1)
-                      ),
-                      url(${`https://res.cloudinary.com/dnm7mbocc/image/fetch/${files[0] ? files[0].preview : newPost.banner}`});
-                }
-
-                .post-navigator span {
-                    font-size: 20px;
-                    vertical-align: text-bottom;
-                }
-
-                .next {
-                    text-align: right;
-                }
-
-                .prev {
-                    text-align: left;
-                }
-
-                .file-uploader {
-                  position: absolute;
-                  top: 0;
-                  font-size: 30px;
-                  height: inherit;
-                  width: inherit;
-                  margin: auto;
-                  border: solid 1px red;
-                  padding: inherit;
-                  left: 10vw;
-                  right: 10vw;
-               }
-
-                .uploader-desc {
-                  color: white;
-                  background: black;
-                  text-align: center;
-                  margin-top: 20%;
-                }
-
-                .loader-container {
-                  display: flex;
-                  justify-content: center;
-                  margin-top: 50px;
-                } 
-
-                #disqus_thread {
-                  padding: 0 10vw;
-                }
-            `}</style>
+           `}</style>
     </Layout>
   );
 }

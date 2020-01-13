@@ -1,7 +1,18 @@
+@import '../../styles/common.scss';
+
 #post-list {
 	.omnisearch {
 		width: 300px;
+
 		margin-left: 15px;
+		@media (max-width: $medium-device) {
+			width: calc(100% - 10px);
+			margin-left: 0px;
+		}
+
+		@media (max-width: $small-device) {
+			width: 200px;
+		}
 	}
 
 	.preview {
@@ -11,6 +22,12 @@
 		padding-bottom: 0;
 		margin-bottom: 10px;
 		margin-left: 30px;
+
+		@media (max-width: $small-device) {
+			font-size: 12px;
+			width: 200px;
+		}
+
 		&.hide {
 			display: none;
 		}
@@ -20,6 +37,9 @@
 			padding: 10px;
 			font-size: 18px;
 			font-weight: bold;
+			@media (max-width: $small-device) {
+				font-size: 14px;
+			}
 		}
 	}
 
@@ -28,12 +48,14 @@
 	}
 
 	.load-more-button {
-		
 	}
 
 	.title:not(.load-more-button) {
 		// color: #999;
 		font-size: 3.5rem;
+		@media (max-width: $small-device) {
+			font-size: 1.5rem;
+		}
 		margin-bottom: 0;
 	}
 
@@ -49,6 +71,9 @@
 		&:not(.load-more-button) {
 			font-size: 4rem;
 			width: 100vw;
+			@media (max-width: $small-device) {
+				font-size: 1.7rem;
+			}
 		}
 		cursor: pointer;
 		&.selected {
@@ -68,5 +93,8 @@
 		margin-top: 10px;
 		width: 300px;
 		font-size: 1.5rem;
+		@media (max-width: $small-device) {
+			font-size: 1rem;
+		}
 	}
 }

@@ -1,0 +1,154 @@
+@import "../../../node_modules/bulma/bulma.sass";
+@import '../../styles/common.scss';
+
+.subtitle {
+	color: #999;
+	font-style: italic;
+	@media (max-width: $small-device) {
+		font-size: 14px;
+	}
+}
+
+.header-overlay {
+	content: "";
+	width: 100vw;
+	height: inherit;
+	position: absolute;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 255, 255, 1));
+}
+
+.header a {
+	font-size: 20px;
+}
+
+h1.title.is-1 {
+	font-size: 60px;
+	@media (max-width: $small-device) {
+		font-size: 30px;
+	}
+}
+
+.header .container {
+	padding: 0 10vw;
+}
+
+.content {
+	padding: 50px 10vw;
+}
+
+.top {
+	position: fixed;
+	right: 10vw;
+	bottom: 100px;
+	padding: 10px;
+}
+
+.post-navigator {
+	display: flex;
+	padding: 30px 10vw;
+	/* border-top: dashed 1px black; */
+	justify-content: space-between;
+}
+
+.post-navigator span {
+    font-size: 20px;
+    vertical-align: text-bottom;
+    @media (max-width: $small-device) {
+        font-size: 14px;
+    }
+}
+
+.next {
+    text-align: right;
+    @media (max-width: $small-device) {
+        width: 100px;
+    }
+}
+
+.prev {
+    text-align: left;
+    @media (max-width: $small-device) {
+        width: 100px;
+    }
+}
+
+.file-uploader {
+	position: absolute;
+	top: 0;
+	font-size: 30px;
+	height: inherit;
+	width: inherit;
+	margin: auto;
+	border: solid 1px red;
+	padding: inherit;
+	left: 10vw;
+	right: 10vw;
+}
+
+.uploader-desc {
+	color: white;
+	background: black;
+	text-align: center;
+	margin-top: 20%;
+}
+
+.loader-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+}
+
+.post {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@extend .title;
+	}
+
+	h1 {
+		@extend .is-1;
+	}
+
+	h2 {
+		@extend .is-2;
+	}
+
+	h3 {
+		@extend .is-3;
+	}
+
+	h4 {
+		@extend .is-4;
+	}
+
+	h5 {
+		@extend .is-5;
+	}
+
+	h6 {
+		@extend .is-6;
+	}
+
+	p,
+	li {
+		font-size: 24px;
+		text-align: justify;
+		@media (max-width: $small-device) {
+			font-size: 14px;
+		}
+	}
+
+	img {
+		min-width: 500px;
+		display: block;
+        margin: auto;
+        
+        @media (max-width: $small-device) {
+            min-width: 200px;
+            max-width: 70vw; 
+        }
+	}
+}
