@@ -18,7 +18,6 @@ import MutationClient from '../utils/apolloMutationClient';
 
 const metadata = require('../site.config').default;
 
-// const requireContext = require('require-context');
 
 type Props = {
     posts: [Post],

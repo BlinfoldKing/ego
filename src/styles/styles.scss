@@ -18,6 +18,16 @@
 	src: url(/Bankay.otf) format("opentype");
 }
 
+@font-face {
+	font-family: Modernia;
+	src: url(/Modernia-Regular.otf) format("opentype");
+}
+
+@font-face {
+	font-family: Michelangelo;
+	src: url(/MichelangeloFree-2O7Le.otf) format("opentype");
+}
+
 * {
 	font-variant-ligatures: normal;
 	font-family: Victor Mono;
@@ -28,13 +38,27 @@
 }
 
 #logo {
-	font-family: Bankay;
-	font-size: 40px;
+	font-family: Michelangelo;
+	font-size: 30px;
 }
 
 nav {
 	* {
-		font-size: 20px;
+		&.navbar-end {
+			font-size: 20px;
+		}
+  }
+  
+  .navbar-item {
+    padding-bottom: 0;
+  }
+
+	.burger {
+		span {
+			height: 3px;
+			width: 20px;
+		}
+		margin-right: 0.75rem;
 	}
 }
 
@@ -44,7 +68,7 @@ footer {
 	background: white;
 	height: 60px;
 	width: 100vw;
-	display: flex;
+	display: flex !important;
 	align-items: flex-start;
 	text-align: center;
 }
