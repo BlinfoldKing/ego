@@ -55,7 +55,7 @@ export default class Layout extends React.Component<Props> {
           >
             <div className="navbar-brand">
               <a href="/" className="navbar-item">
-                <h1 id="logo">EGO</h1><span className="version">{metadata.version}</span>
+                <h1 id="logo">BLNFK<span className=""></span></h1>
               </a>
               <a
                 id="burger"
@@ -101,7 +101,7 @@ export default class Layout extends React.Component<Props> {
         {children}
         <footer>
           <div className="foot-note" id="footer">
-            made with 🔥 by <a href="https://github.com/blinfoldking">blinfoldking</a>
+            made with 🔥 ⌨ by <a href="https://github.com/blinfoldking">blinfoldking</a>
           </div>
         </footer>
         <style jsx>

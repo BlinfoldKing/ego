@@ -90,23 +90,6 @@ type Props = {
     apolloClient: ApolloClient
 };
 
-function debounce(func, wait = 20, immediate = true) {
-  let timeout;
-  return () => {
-    const context = this;
-    // eslint-disable-next-line prefer-rest-params
-    const args = arguments;
-    const later = () => {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-}
-
 export default function Page(props: Props) {
   if (typeof window === 'undefined') {
     global.window = {};
@@ -116,9 +99,9 @@ export default function Page(props: Props) {
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', debounce(handleScroll));
-    return () => window.removeEventListener('scroll', debounce(handleScroll));
-  }, [debounce]);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // grab the instance of the cms to access the registered git API
   const { post } = props;
