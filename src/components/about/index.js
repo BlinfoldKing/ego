@@ -19,6 +19,22 @@ const About = () => (
         <i className="fas fa-envelope-square" style={{ fontSize: 30 }} />
       </a>
     </div>
+    <div className="timeline">
+      <ul>
+        {metadata.profile.experience.map((xp, i) => (
+          <li key={i}>
+            <div>
+              <strong>
+             &gt; {xp.title}
+              </strong>
+            </div>
+            <div className="date">
+              <a href={xp.org_url}>{xp.org}</a>| <i>{xp.period}</i>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 );
 

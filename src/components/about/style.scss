@@ -18,4 +18,22 @@
 		width: 100vw;
 		background: linear-gradient(to right, #333, #222, #22222222, #11111100);
 	}
+
+	.timeline {
+		border-top: 1px dashed #c4c4c4;
+		padding-top: 30px;
+		margin-top: 30px;
+		width: 600px;
+		strong {
+			margin-right: 15px ;
+			font-size: 25px;
+		}
+
+		.date {
+			margin-left: 10px;
+			a {
+				text-decoration: underline;
+			}
+		}
+	}
 }

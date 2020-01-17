@@ -14,6 +14,26 @@ const config = {
       linkedin: 'https://linkedin.com/in/ganeshad',
       email: 'mailto://ganeshadanu1@gmail.com',
     },
+    experience: [
+      {
+        title: 'Backend Software Engineer',
+        period: 'July 2019 - November 2019',
+        org: 'kumparan',
+        org_url: 'https://kumparan.com',
+      },
+      {
+        title: 'iOS Engineer',
+        period: 'November 2018 - June 2019',
+        org: 'Proofn Indonesia',
+        org_url: 'https://proofn.com',
+      },
+      {
+        title: 'Chief Operating Officer',
+        period: 'January 2019 - Present',
+        org: 'Proclub Telkom Univ.',
+        org_url: 'https://helloproclub.github.io',
+      },
+    ],
   },
   version: 'v2.2.2',
 };

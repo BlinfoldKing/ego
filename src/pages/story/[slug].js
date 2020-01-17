@@ -90,8 +90,6 @@ type Props = {
     apolloClient: ApolloClient
 };
 
-
-
 export default function Page(props: Props) {
   if (typeof window === 'undefined') {
     global.window = {};
