@@ -75,6 +75,7 @@
 		cursor: pointer;
 		&.selected {
 			color: white;
+			// background: linear-gradient(to right, #333, #222, #22222222, #11111100);
 			background: linear-gradient(to right, #333, #222, #22222222, #11111100);
 		}
 	}

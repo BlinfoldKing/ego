@@ -162,13 +162,13 @@ const BlogList = () => {
                 },
               });
             }}
-            className="title is-2 end is-active load-more-button has-text-link">
+            className="title is-2 end is-active load-more-button">
             <i className="fas fa-angle-double-down"></i>
             &nbsp;Load More
           </span>
         </a>
         : (!loading && data.posts.length === 0 && <div>
-          <h1 className="title is-1"> No Post Found :( </h1>
+          <h1 className="title is-1"> No Post Found :(( </h1>
           <div>
             <div>
               <a href="#" onClick={() => handleSearch()}>Try Again</a>

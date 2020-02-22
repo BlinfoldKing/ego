@@ -4,6 +4,22 @@
 
 @import "./common.scss";
 
+
+
+a:not(.navbar-item), .load-more-button {
+	color: #7B00FF !important;
+}
+
+.navbar-item {
+  &:hover {
+    color: #7B00FF !important;
+  }
+}
+
+a:hover, a:active, a:link {
+	color: #7B00FF !important;
+}
+
 .editor {
 	border: solid 1px red;
 }
@@ -60,13 +76,28 @@ nav {
 		}
 		margin-right: 0.75rem;
 	}
+
+	a.active {
+		color: white !important;
+		background: #7B00FF;
+		&:hover, &:visited, &:active {
+			color: #7B00FF;
+		}
+	}
 }
 
 footer {
-	z-index: 100;
-	position: relative;
-	background: white;
-	height: 60px;
+  z-index: 100;
+  position: relative;
+  *, a {
+    color: white !important;
+  }
+  a {
+    font-style: italic;
+  }
+  bottom: 0;
+  background: #7B00FF;
+	height: 30px;
 	width: 100vw;
 	display: flex !important;
 	align-items: flex-start;
@@ -78,7 +109,7 @@ footer {
 }
 
 .home {
-	max-height: calc(100vh - 60px);
+	max-height: calc(100vh - 30px);
 	overflow: hidden;
 	@media (min-width: $medium-device) {
 		padding: 100px;
