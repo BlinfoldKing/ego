@@ -56,7 +56,7 @@
     "node-fetch": "^2.6.0",
     "node-sass": "^4.13.0",
     "nookies": "^2.0.8",
-    "prismjs": "^1.17.1",
+    "prismjs": "^1.27.0",
     "raw-loader": "^4.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
