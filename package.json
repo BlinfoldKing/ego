@@ -42,7 +42,7 @@
     "draft-js-side-toolbar-plugin": "^3.0.2",
     "draftjs-md-converter": "^1.2.0",
     "draftjs-to-html": "^0.9.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-form-data": "^2.0.10",
     "graphql": "^14.5.8",
     "gray-matter": "^4.0.2",
